@@ -1,0 +1,108 @@
+<odoo>
+  <data>
+
+  <record model="ir.ui.view" id="camelido_tree">
+    <field name="name">Camelido</field>
+    <field name="model">coop2.camelido</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="nombre_camelido"/>
+        <field name="nombre_socio"/>
+        <field name="sexo"/>
+        <field name="raza"/>
+        <field name="color"/>
+      </tree>
+    </field>
+  </record>
+
+
+  <record model="ir.ui.view" id="camelido_form">
+    <field name="name">Camelido</field>
+    <field name="model">coop2.camelido</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group string="Información general">
+            <group>
+              <field name="nombre_camelido"/>
+              <field name="fecha_empadre"/>
+              <field name="fecha_nac"/>
+              <field name="edad"/>
+              <field name="tipo_identificacion"/>
+              <field name="identificacion"/>
+              <field name="potrero_id"/>
+              <field name="nombre_socio"/>
+            </group>
+            <group>
+              <field name="sexo" widget="radio"/>
+              <field name="raza"/>
+              <field name="color"/>
+              <field name="categoria"/>
+              <field name="esquila" widget="radio"/>
+              <field name="num_esquila" attrs="{'invisible':[('esquila', '==', 'no')]}"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Antepasados">
+              <group>
+                <field name="cod_padre" domain="[('sexo', '=', 'masculino'), ('nombre_camelido', '!=', nombre_camelido)]"/>
+                <field name="cod_madre" domain="[('sexo', '=', 'femenino'), ('nombre_camelido', '!=', nombre_camelido)]"/>
+                <field name="cod_abuelo" domain="[('sexo', '=', 'masculino'), ('nombre_camelido', '!=', nombre_camelido)]"/>
+                <field name="cod_abuela" domain="[('sexo', '=', 'femenino'), ('nombre_camelido', '!=', nombre_camelido )]"/>
+                <field name="cod_bisabuelo" domain="[('sexo', '=', 'masculino'), ('nombre_camelido', '!=', nombre_camelido )]"/>
+                <field name="cod_bisabuela" domain="[('sexo', '=', 'femenino'), ('nombre_camelido', '!=', nombre_camelido )]"/>
+              </group>
+            </page>
+            <page string="Características del Vellón">
+              <group>
+                <group string="Propiedades Físicas">
+                  <field name="diametro"/>
+                  <field name="longitud_mecha"/>
+                  <field name="rizo_ondulacion"/>
+                  <field name="resistencia_tenacidad"/>
+                  <field name="lustre_brillo"/>
+                  <field name="categoria_vellon"/>
+                  <field name="clasificacion_vellon"/>
+                </group>
+               </group>
+            </page>
+            <page string="Conformación">
+              <group>
+                <field name="cabeza"/>
+                <field name="talla"/>
+                <field name="calze"/>
+                <field name="ap_general"/>
+                <field name="defectos"/>
+              </group>
+            </page>
+            <page string="Observaciones">
+              <group>
+                <field name="observaciones"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+
+  <record id="action_camelido" model="ir.actions.act_window">
+    <field name="name">Camelido</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">coop2.camelido</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Agrege un Camelido.        
+      </p>
+    </field>
+  </record>
+
+  <menuitem id="coop_camelido" name="Camélidos" parent="coop_root" action="action_camelido"/>
+  
+
+  </data>
+</odoo>
+

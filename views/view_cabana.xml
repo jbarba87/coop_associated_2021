@@ -35,6 +35,14 @@
           </group>
           <notebook>
             <page string="Parcelas">
+              <field name="parcelas">
+                <tree editable="bottom">
+                  <field name="nombre_parcela"/>
+<!--                  <field name="num_potreros"/> -->
+                  <field name="area"/>
+                  <field name="cond_tenencia_tierras"/>
+                </tree>
+              </field>
             </page>
           </notebook>
         </sheet>
@@ -55,7 +63,7 @@
     </field>
   </record>
   
-  <menuitem id="coop_root" name="Coopecan 2" sequence="" />
+
   <menuitem id="coop_cabana" name="Cabañas" parent="coop_root" action="action_cabana"/>
 
   </data>
