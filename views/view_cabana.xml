@@ -12,6 +12,7 @@
         <field name="provincia_cab"/>
         <field name="departamento_cab"/>
         <field name="socio_id"/>
+        <field name="num_parcelas"/>
       </tree>
     </field>
   </record>
@@ -38,7 +39,7 @@
               <field name="parcelas">
                 <tree editable="bottom">
                   <field name="nombre_parcela"/>
-<!--                  <field name="num_potreros"/> -->
+                  <field name="num_potreros"/>
                   <field name="area"/>
                   <field name="cond_tenencia_tierras"/>
                 </tree>

@@ -11,6 +11,7 @@
         <field name="nombre_socio"/>
         <field name="area"/>
         <field name="cond_tenencia_tierras"/>
+        <field name="num_potreros"/>
       </tree>
     </field>
   </record>
@@ -34,7 +35,7 @@
 
           <notebook>
             <page string="Potrero">
-          <!--              <field name="potreros">
+              <field name="potreros">
                 <tree editable="bottom">
                   <field name="nombre_potrero"/>
                   <field name="area"/>
@@ -42,7 +43,7 @@
                   <field name="area_pasto_natural"/>
                   <field name="area_pasto_cultivado"/>
                 </tree>
-              </field> -->
+              </field>
             </page>
           </notebook>
         </sheet>

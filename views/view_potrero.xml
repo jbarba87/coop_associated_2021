@@ -12,6 +12,7 @@
         <field name="material"/>
         <field name="area_pasto_natural"/>
         <field name="area_pasto_cultivado"/>
+        <field name="num_camelidos"/>
       </tree>
     </field>
   </record>

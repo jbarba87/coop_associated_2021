@@ -12,11 +12,11 @@ class parcela(models.Model):
   
   
   # Funcion que cuenta la cantidad de potreros de la parcela
-  #@api.one
-  #@api.depends('potreros')
-  #def count_potreros(self):
-  #  if self.potreros is not False:
-  #    self.num_potreros = self.env["coop2.potrero"].search_count([('parcela_id', '=', self.id)])
+  @api.one
+  @api.depends('potreros')
+  def count_potreros(self):
+    if self.potreros is not False:
+      self.num_potreros = self.env["coop2.potrero"].search_count([('parcela_id', '=', self.id)])
 
   # Funcion que autocompleta el campo Socio, para saber el socio dueño de la parcela
   @api.one
@@ -27,7 +27,6 @@ class parcela(models.Model):
       self.nombre_socio = socio.name
   
   nombre_parcela = fields.Char(string="Nombre de la parcela", required = True)
-#  num_potrero = fields.Integer(string = "Nº potreros")       # esto se debe eliminar
   area = fields.Float(string="Area")
     
   # condicion de tenencia de tierras (de la parcela)
@@ -39,14 +38,14 @@ class parcela(models.Model):
   ], default="posesionario", string="Condicion de tenencia de tierras")
 
   # Campos computados
-  #num_potreros = fields.Integer(string="Cantidad potreros", compute="count_potreros", store=True)
+  num_potreros = fields.Integer(string="Cantidad potreros", compute="count_potreros", store=True)
   socio_id = fields.Char(string="Socio", compute="get_socio", store=True)
   
   # Campos relacionales
 
   cabana_id = fields.Many2one('coop2.cabana', string="Rebaño/Cabaña", required = True)
   
-  #potreros = fields.One2many('coop2.potrero', 'parcela_id', string="Potreros")
+  potreros = fields.One2many('coop2.potrero', 'parcela_id', string="Potreros")
 
 
 

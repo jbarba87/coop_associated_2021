@@ -24,7 +24,7 @@ class camelido_andino(models.Model):
   def get_socio(self):
     if self.potrero_id is not False:
       socio = self.potrero_id.parcela_id.cabana_id.socio_id
-      self.nombre_socio = socio.nombre
+      self.nombre_socio = socio.name
       
 
   nombre_camelido = fields.Char(string="Nombre", required=True)

@@ -11,13 +11,22 @@ class potrero(models.Model):
   _rec_name = "nombre_potrero"
 
 
+  # Funcion que cuenta la cantidad de potreros de la parcela
+  @api.one
+  @api.depends('camelidos')
+  def count_camelidos(self):
+    if self.camelidos is not False:
+      self.num_camelidos = self.env["coop2.camelido"].search_count([('potrero_id', '=', self.id)])
+
+
+
   # Funcion que autocompleta el campo Socio, para saber el socio dueño de la parcela
   @api.one
   @api.depends('parcela_id')
   def get_socio(self):
     if self.parcela_id is not False:
       socio = self.parcela_id.cabana_id.socio_id
-      self.nombre_socio = socio.nombre
+      self.nombre_socio = socio.name
       
       
       
@@ -64,6 +73,9 @@ class potrero(models.Model):
   
   observaciones = fields.Text("Observaciones")  
   
+  
+  
+  num_camelidos = fields.Integer(string="Cantidad camelidos", compute="count_camelidos", store=True)
   
   area_bofedales = fields.Float("Area de bofedales totales")
   area_ereazeos = fields.Float("Area de zonas ereazeos totales")
