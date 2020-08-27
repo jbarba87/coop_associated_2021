@@ -30,6 +30,26 @@
       </field>
     </record>
     
+    
+    <!-- kanban view-->
+    <!--
+    <record model="ir.ui.view" id="res_partner_kanban_view_socio">
+      <field name="name">res.partner.kanban.view.socio</field>
+      <field name="model">res.partner</field>
+      <field name="mode">primary</field>
+      <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+      <field name="arch" type="xml">
+        <field name="id" position="after">
+        
+        </field>
+      
+      </field>
+      
+    </record>
+    -->
+    
+    
+    
     <record id="view_res_partner_inherit_rearch" model="ir.ui.view">
       <field name="name">res.partner.search.expand.filter</field>
       <field name="model">res.partner</field>
@@ -42,13 +62,15 @@
     </record>
     
     
+    
+    
     <record id="action_socio" model="ir.actions.act_window">
     <field name="name">Socios</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">res.partner</field>
     <field name="context"> {"search_default_filter_socio":1} </field> <!-- search_default_<filter name>  -->
     <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
+    <field name="view_mode">kanban,tree,form</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
         Agrege un socio.        
