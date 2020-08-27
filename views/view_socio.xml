@@ -30,9 +30,37 @@
       </field>
     </record>
     
+    <record id="view_res_partner_inherit_rearch" model="ir.ui.view">
+      <field name="name">res.partner.search.expand.filter</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_res_partner_filter"/>
+      <field name="arch" type="xml">
+        <xpath expr="//search" position="inside">
+          <filter string="Socios" name="filter_socio" domain="[('es_socio', '=', True)]"/>
+        </xpath>
+      </field>
+    </record>
     
-  <menuitem id="coop_root" name="Coopecan 2" sequence="" />
     
+    <record id="action_socio" model="ir.actions.act_window">
+    <field name="name">Socios</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">res.partner</field>
+    <field name="context"> {"search_default_filter_socio":1} </field> <!-- search_default_<filter name>  -->
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Agrege un socio.        
+      </p>
+    </field>
+  </record>
+    
+    
+    
+    
+    <menuitem id="coop_root" name="Coopecan 2" sequence="" />
+    <menuitem id="coop_socio" name="Socios"  sequence="0"  parent="coop_root" action="action_socio"/>
   </data>
 
 </odoo>

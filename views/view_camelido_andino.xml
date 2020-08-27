@@ -45,12 +45,12 @@
           <notebook>
             <page string="Antepasados">
               <group>
-                <field name="cod_padre" domain="[('sexo', '=', 'masculino'), ('nombre_camelido', '!=', nombre_camelido)]"/>
-                <field name="cod_madre" domain="[('sexo', '=', 'femenino'), ('nombre_camelido', '!=', nombre_camelido)]"/>
-                <field name="cod_abuelo" domain="[('sexo', '=', 'masculino'), ('nombre_camelido', '!=', nombre_camelido)]"/>
-                <field name="cod_abuela" domain="[('sexo', '=', 'femenino'), ('nombre_camelido', '!=', nombre_camelido )]"/>
-                <field name="cod_bisabuelo" domain="[('sexo', '=', 'masculino'), ('nombre_camelido', '!=', nombre_camelido )]"/>
-                <field name="cod_bisabuela" domain="[('sexo', '=', 'femenino'), ('nombre_camelido', '!=', nombre_camelido )]"/>
+                <field name="cod_padre" domain="[('sexo', '=', 'macho'), ('nombre_camelido', '!=', nombre_camelido)]"/>
+                <field name="cod_madre" domain="[('sexo', '=', 'hembra'), ('nombre_camelido', '!=', nombre_camelido)]"/>
+                <field name="cod_abuelo" domain="[('sexo', '=', 'macho'), ('nombre_camelido', '!=', nombre_camelido)]"/>
+                <field name="cod_abuela" domain="[('sexo', '=', 'hembra'), ('nombre_camelido', '!=', nombre_camelido )]"/>
+                <field name="cod_bisabuelo" domain="[('sexo', '=', 'macho'), ('nombre_camelido', '!=', nombre_camelido )]"/>
+                <field name="cod_bisabuela" domain="[('sexo', '=', 'hembra'), ('nombre_camelido', '!=', nombre_camelido )]"/>
               </group>
             </page>
             <page string="Características del Vellón">

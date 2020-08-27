@@ -60,9 +60,9 @@ class camelido_andino(models.Model):
 #  socio_id = fields.Many2one('coop2.socio', string="Socio Propietario", required = True)
   
   sexo = fields.Selection([
-    ('masculino', 'Masculino'),
-    ('femenino', 'Femenino'),
-  ], default="masculino", string="Sexo")
+    ('macho', 'Macho'),
+    ('hembra', 'Hembra'),
+  ], default="macho", string="Género")
   
   raza = fields.Char(string="Raza")
   color = fields.Char(string="Color")
