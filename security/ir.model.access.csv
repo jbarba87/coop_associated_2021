@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-
+access_coop2_cabana,access.coop2.cabana,model_coop2_cabana,,1,1,1,1
+access_coop2_parcela,access.coop2.parcela,model_coop2_parcela,,1,1,1,1
+access_coop2_potrero,access.coop2.potrero,model_coop2_potrero,,1,1,1,1
+access_coop2_camelido,access.coop2.camelido,model_coop2_camelido,,1,1,1,1
