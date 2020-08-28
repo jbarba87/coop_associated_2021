@@ -1,0 +1,43 @@
+<odoo>
+<!--
+  <record id="act_potrero_camelido" model="ir.actions.act_window">
+    <field name="name">Potrero camelido</field>
+    <field name="res_model">coop2.potrero</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="coop2.potrero_graph" />
+  
+  </record>
+
+
+  <record id="dashboard_form_view" model="ir.ui.view">
+    <field name="name">Dashboard Form </field>
+    <field name="model">board.board</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+      <form string="Dashboard">
+        <board style="1-2">
+          <column>
+            <action string="Grafico" name="coop2.act_potrero_camelido"/>
+          </column>
+        </board>
+      </form>
+    </field>
+ </record>
+
+
+
+  <record id="coop2_dashboard" model="ir.actions.act_window">
+    <field name="name">Dashboard</field>
+    <field name="res_model">board.board</field>
+    <field name="view_mode">form</field>
+    <field name="usage">menu</field>
+    <field name="view_id" ref="dashboard_form_view"/>
+  </record>
+
+
+
+  <menuitem name="Dashboard" id="menu_dashboard" sequence="-1" parent="coop_root" action="coop2_dashboard" />
+
+-->
+
+</odoo>

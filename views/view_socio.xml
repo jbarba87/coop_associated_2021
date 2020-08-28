@@ -26,28 +26,31 @@
               </field>
             </group>
           </page>
+          <page string="Resumen" attrs="{'invisible':[('es_socio', '==', False)]}">
+            <group>
+              <field name="num_camelidos"/>
+              <field name="num_cabanas"/>
+              <field name="num_parcelas"/>
+              <field name="num_potreros"/>
+            </group>
+          </page>
         </xpath>
       </field>
     </record>
     
     
-    <!-- kanban view-->
-    <!--
-    <record model="ir.ui.view" id="res_partner_kanban_view_socio">
-      <field name="name">res.partner.kanban.view.socio</field>
+    <!-- graph view -->
+    <record id="socio_graph" model="ir.ui.view">
+      <field name="name">coop2.socio_camelido</field>
       <field name="model">res.partner</field>
-      <field name="mode">primary</field>
-      <field name="inherit_id" ref="base.res_partner_kanban_view"/>
       <field name="arch" type="xml">
-        <field name="id" position="after">
-        
-        </field>
-      
+        <graph string="Gráfica">
+          <field name="name"/>
+          <field name="num_camelidos" type="measure"/>
+        </graph>
       </field>
-      
     </record>
-    -->
-    
+
     
     
     <record id="view_res_partner_inherit_rearch" model="ir.ui.view">
@@ -70,7 +73,7 @@
     <field name="res_model">res.partner</field>
     <field name="context"> {"search_default_filter_socio":1} </field> <!-- search_default_<filter name>  -->
     <field name="view_type">form</field>
-    <field name="view_mode">kanban,tree,form</field>
+    <field name="view_mode">kanban,tree,form,graph</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
         Agrege un socio.        

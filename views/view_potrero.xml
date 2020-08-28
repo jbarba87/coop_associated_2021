@@ -76,7 +76,7 @@
             <page string="Camelidos">
               <field name="camelidos">
                 <tree editable="bottom">
-                  <field name="nombre_camelido"/>
+                  <field name="identificacion"/>
                   <field name="potrero_id"/>
                   <field name="nombre_socio"/>
                   <field name="fecha_empadre"/>
@@ -91,13 +91,25 @@
     </field>
   </record>
 
+  <!-- graph view -->
+  <record id="camelido_graph" model="ir.ui.view">
+    <field name="name">coop2.potrero_camelido</field>
+    <field name="model">coop2.potrero</field>
+    <field name="arch" type="xml">
+      <graph string="Gráfica">
+        <field name="nombre_potrero"/>
+        <field name="num_camelidos" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
 
   <record id="action_potrero" model="ir.actions.act_window">
     <field name="name">Potrero</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">coop2.potrero</field>
     <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
+    <field name="view_mode">tree,form,graph</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
         Agrege una Potrero.        

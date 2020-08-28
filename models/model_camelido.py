@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 class camelido_andino(models.Model):
   _name = "coop2.camelido"
   _description = "Camelido Andino"
-  _rec_name = "nombre_camelido"
+  _rec_name = "identificacion"
   
   @api.one
   @api.depends('fecha_nac')
@@ -16,8 +16,6 @@ class camelido_andino(models.Model):
       nac = fields.Date.from_string(self.fecha_nac)
       self.edad = today.year - nac.year - ( (today.month, today.day) < (nac.month, nac.day) )
 
-
-
   # Funcion que autocompleta el campo Socio, para saber el socio dueño de la parcela
   @api.one
   @api.depends('potrero_id')
@@ -25,9 +23,15 @@ class camelido_andino(models.Model):
     if self.potrero_id is not False:
       socio = self.potrero_id.parcela_id.cabana_id.socio_id
       self.nombre_socio = socio.name
-      
+      self.socio_id = socio.id
+  @api.one
+  @api.depends('potrero_id')
+  def get_socio_id(self):
+    if self.potrero_id is not False:
+      socio = self.potrero_id.parcela_id.cabana_id.socio_id
+      self.socio_id = socio.id
+  identificacion = fields.Char(string="Número", required=True)
 
-  nombre_camelido = fields.Char(string="Nombre", required=True)
   fecha_empadre = fields.Date(string="Fecha de empadre")
   fecha_nac = fields.Date(string="Fecha de naciomiento")
   edad = fields.Integer(string="Edad", compute="calcula_edad", store=True)
@@ -40,16 +44,8 @@ class camelido_andino(models.Model):
     ('otro', 'Otro'),
   ], default="tatuaje", string="Tipo de identificación")
 
-  identificacion = fields.Char(string="Número")
-  
-  # Antepasados
-  #cod_padre = fields.Char(string="Código del padre")
-  #cod_madre = fields.Char(string="Código de la madre")
-  #cod_abuelo = fields.Char(string="Código del abuelo")
-  #cod_abuela = fields.Char(string="Código de la abuela")
-  #cod_bisabuelo = fields.Char(string="Código del bisabuelo")
-  #cod_bisabuela = fields.Char(string="Código de la bisabuela")
-  
+
+
   # Campos relacionales
   cod_padre = fields.Many2one('coop2.camelido', string="Código del padre")
   cod_madre = fields.Many2one('coop2.camelido', string="Código de la madre")
@@ -116,3 +112,4 @@ class camelido_andino(models.Model):
   
   # obtencion del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
+  socio_id = fields.Integer(string="id", compute="get_socio_id", store=True)

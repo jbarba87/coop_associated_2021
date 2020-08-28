@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base'],
+    'depends': ['base', 'board'],
 
     # always loaded
     'data': [
@@ -32,6 +32,7 @@
         'views/view_parcela.xml',
         'views/view_potrero.xml',
         'views/view_camelido_andino.xml',
+        'views/view_tablero.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

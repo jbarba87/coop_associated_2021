@@ -25,7 +25,9 @@ class cabana(models.Model):
   def get_socio(self):
     if self.socio_id is not False:
       socio = self.socio_id
+      print("nombre ", socio.name)
       self.nombre_socio = socio.name
+
 
   nombre = fields.Char(string = "Nombre", required = True)
   
@@ -44,8 +46,8 @@ class cabana(models.Model):
   
   # Campos relacionales
   socio_id = fields.Many2one('res.partner', string="Socio Propietario", required = True)
-  
   parcelas = fields.One2many('coop2.parcela', 'cabana_id', string="Parcela")
   
-  # Obtencion del socio
+  # Datos del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
+

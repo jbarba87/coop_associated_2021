@@ -6,8 +6,9 @@
     <field name="model">coop2.camelido</field>
     <field name="arch" type="xml">
       <tree>
-        <field name="nombre_camelido"/>
+        <field name="identificacion"/>
         <field name="nombre_socio"/>
+        <field name="socio_id"/>
         <field name="sexo"/>
         <field name="raza"/>
         <field name="color"/>
@@ -24,14 +25,14 @@
         <sheet>
           <group string="Información general">
             <group>
-              <field name="nombre_camelido"/>
+              <field name="identificacion"/>
+              <field name="tipo_identificacion"/>
               <field name="fecha_empadre"/>
               <field name="fecha_nac"/>
               <field name="edad"/>
-              <field name="tipo_identificacion"/>
-              <field name="identificacion"/>
               <field name="potrero_id"/>
               <field name="nombre_socio"/>
+              <field name="socio_id"/>
             </group>
             <group>
               <field name="sexo" widget="radio"/>
@@ -45,12 +46,12 @@
           <notebook>
             <page string="Antepasados">
               <group>
-                <field name="cod_padre" domain="[('sexo', '=', 'macho'), ('nombre_camelido', '!=', nombre_camelido)]"/>
-                <field name="cod_madre" domain="[('sexo', '=', 'hembra'), ('nombre_camelido', '!=', nombre_camelido)]"/>
-                <field name="cod_abuelo" domain="[('sexo', '=', 'macho'), ('nombre_camelido', '!=', nombre_camelido)]"/>
-                <field name="cod_abuela" domain="[('sexo', '=', 'hembra'), ('nombre_camelido', '!=', nombre_camelido )]"/>
-                <field name="cod_bisabuelo" domain="[('sexo', '=', 'macho'), ('nombre_camelido', '!=', nombre_camelido )]"/>
-                <field name="cod_bisabuela" domain="[('sexo', '=', 'hembra'), ('nombre_camelido', '!=', nombre_camelido )]"/>
+                <field name="cod_padre" domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]"/>
+                <field name="cod_madre" domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion)]"/>
+                <field name="cod_abuelo" domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]"/>
+                <field name="cod_abuela" domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]"/>
+                <field name="cod_bisabuelo" domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion )]"/>
+                <field name="cod_bisabuela" domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]"/>
               </group>
             </page>
             <page string="Características del Vellón">

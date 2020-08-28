@@ -24,19 +24,25 @@ class potrero(models.Model):
   @api.one
   @api.depends('parcela_id')
   def get_socio(self):
+    print("    hola desde get socios potreros")
     if self.parcela_id is not False:
       socio = self.parcela_id.cabana_id.socio_id
       self.nombre_socio = socio.name
-      
-      
-      
+
+
+  @api.one
+  @api.depends('parcela_id')
+  def get_socio_id(self):
+    if self.parcela_id is not False:
+      socio = self.parcela_id.cabana_id.socio_id
+      self.socio_id = socio.id
+
 
   nombre_potrero = fields.Char(string="Nombre del potrero", required = True)
   area = fields.Float(string="Area del potrero")
   material = fields.Char(string="Material del potrero")
   area_pasto_natural = fields.Float(string="Area de pastos naturales")
-  
-  #socio = fields.Char(string="Socio", compute="get_socio", store=True)
+
   
   # Pasto cultivado
   area_pasto_cultivado = fields.Float(string="Area de pastos cultivados")
@@ -74,7 +80,7 @@ class potrero(models.Model):
   observaciones = fields.Text("Observaciones")  
   
   
-  
+  # Campo computado
   num_camelidos = fields.Integer(string="Cantidad camelidos", compute="count_camelidos", store=True)
   
   area_bofedales = fields.Float("Area de bofedales totales")
@@ -86,8 +92,6 @@ class potrero(models.Model):
   
   camelidos = fields.One2many('coop2.camelido', 'potrero_id', string="Camelidos")
   
-  # obtencion del socio
+  # Datos del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
-  
-  
-  
+  socio_id = fields.Integer(compute="get_socio_id", store=True)

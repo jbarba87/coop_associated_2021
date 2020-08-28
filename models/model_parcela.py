@@ -25,7 +25,15 @@ class parcela(models.Model):
     if self.cabana_id is not False:
       socio = self.cabana_id.socio_id
       self.nombre_socio = socio.name
-  
+
+  @api.one
+  @api.depends('cabana_id')
+  def get_socio_id(self):
+    if self.cabana_id is not False:
+      socio = self.cabana_id.socio_id
+      self.socio_id = socio.id
+
+
   nombre_parcela = fields.Char(string="Nombre de la parcela", required = True)
   area = fields.Float(string="Area")
     
@@ -39,14 +47,14 @@ class parcela(models.Model):
 
   # Campos computados
   num_potreros = fields.Integer(string="Cantidad potreros", compute="count_potreros", store=True)
-  socio_id = fields.Char(string="Socio", compute="get_socio", store=True)
+  #socio_id = fields.Char(string="Socio", compute="get_socio", store=True)
   
   # Campos relacionales
 
   cabana_id = fields.Many2one('coop2.cabana', string="Rebaño/Cabaña", required = True)
-  
   potreros = fields.One2many('coop2.potrero', 'parcela_id', string="Potreros")
 
 
-
+  # Datos del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
+  socio_id = fields.Integer(compute="get_socio_id", store=True)
