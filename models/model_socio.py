@@ -44,3 +44,29 @@ class socio(models.Model):
   num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas", store=True)
   num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas", store=True)
   num_potreros = fields.Integer(string="Numero de potreros", compute="contar_potreros", store=True)
+  
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
+  def contar_huacayos(self):
+    self.num_alpacas_huacayo = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id), ('raza', '=', 'huacayo')])
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
+  def contar_suris(self):
+    self.num_alpacas_suri = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id), ('raza', '=', 'suri')])
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
+  def contar_machos(self):
+    self.num_alpacas_macho = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id), ('sexo', '=', 'macho')])
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
+  def contar_hembras(self):
+    self.num_alpacas_hembra = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id), ('sexo', '=', 'hembra')])
+
+  num_alpacas_huacayo = fields.Integer(string="Alpacas Huacayo", compute="contar_huacayos", store=True)
+  num_alpacas_suri = fields.Integer(string="Alpacas Suri", compute="contar_suris", store=True)
+  num_alpacas_macho = fields.Integer(string="Alpacas Macho", compute="contar_machos", store=True)
+  num_alpacas_hembra = fields.Integer(string="Alpacas Hembra", compute="contar_hembras", store=True)
+ 

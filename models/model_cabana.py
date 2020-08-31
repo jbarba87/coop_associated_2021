@@ -4,7 +4,7 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
 from datetime import datetime, timedelta
-
+import json
 
 class cabana(models.Model):
   _name = "coop2.cabana"
@@ -31,11 +31,18 @@ class cabana(models.Model):
 
   nombre = fields.Char(string = "Nombre", required = True)
   
-  comunidad = fields.Char(string = "Comunidad/Asociacion")
+  #comunidad = fields.Char(string = "Comunidad/Asociacion")
   
   distrito_cab = fields.Char(string = "Distrito")
   provincia_cab = fields.Char(string = "Provincia")
-  departamento_cab = fields.Char(string = "Departamento")
+  
+  # Importar departamentos
+  with open('/opt/odoo/odoo/addons/coop2/models/dep.txt', 'r') as dptos:
+    data = json.load(dptos)
+    
+  departamentos = [ (d['departamento'], d['departamento']) for d in data ]
+  departamento_cab = fields.Selection(departamentos, string = "Departamento")
+  #departamento_cab = fields.Char(string = "Departamento")
   
   via_acceso = fields.Char(string = "Via de acceso")
   distancia_capital = fields.Integer(string = "Dist. desde capital Distrital (Kms)")
@@ -47,7 +54,7 @@ class cabana(models.Model):
   # Campos relacionales
   socio_id = fields.Many2one('res.partner', string="Socio Propietario", required = True)
   parcelas = fields.One2many('coop2.parcela', 'cabana_id', string="Parcela")
-  
+  comunidad = fields.Many2one('coop2.asociacion', string="Comunidad/Asociación")
   # Datos del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
 

@@ -34,6 +34,23 @@
               <field name="num_potreros"/>
             </group>
           </page>
+          <page string="Características de los camélidos" attrs="{'invisible':[('es_socio', '==', False)]}">
+            <group>
+              <group>
+                <field name="num_camelidos"/>
+              </group>
+
+              <group>
+                <field name="num_alpacas_huacayo"/>
+                <field name="num_alpacas_suri"/>
+              </group>
+              <group>
+                <field name="num_alpacas_macho"/>
+                <field name="num_alpacas_hembra"/>
+              </group>
+
+            </group>
+          </page>
         </xpath>
       </field>
     </record>

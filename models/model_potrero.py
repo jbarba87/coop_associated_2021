@@ -39,29 +39,47 @@ class potrero(models.Model):
 
 
   nombre_potrero = fields.Char(string="Nombre del potrero", required = True)
-  area = fields.Float(string="Area del potrero")
-  material = fields.Char(string="Material del potrero")
-  area_pasto_natural = fields.Float(string="Area de pastos naturales")
+  area = fields.Float(string="Area del potrero (Ha)")
+  material = fields.Selection([
+    ('madera', 'Madera'),
+    ('estera', 'Estera'),
+    ('otros', 'otros'),
+  ], default="madera", string="Material del potrero") 
+
+  area_pasto_natural = fields.Float(string="Area de pastos naturales (Ha)")
 
   
   # Pasto cultivado
-  area_pasto_cultivado = fields.Float(string="Area de pastos cultivados")
-  tipo_pasto_cultivado = fields.Char(string="Tipo de pasto cultivado")
-  ahno_instalacion = fields.Integer(string="Año de instalacion")
-  riego_semana = fields.Integer(string="Nº riegos por semana")
+  area_pasto_cultivado = fields.Float(string="Area de pastos cultivados (Ha)")
+  tipo_pasto_cultivado = fields.Selection([
+    ('tipo 1', 'Tipo 1'),
+    ('tipo 2', 'Tipo 2'),
+    ('tipo 3', 'Tipo 3'),
+  ], default="tipo 1", string="Tipo de pasto cultivado")
+  
+  # Año de instalacion
+  anho_actual = datetime.today().year
+  anhos = [(x, str(x)) for x in range(1990, anho_actual + 1)] 
+  
+  ahno_instalacion = fields.Selection( anhos, default="1990", string="Año de instalacion")
+  
+  riegos = [(x, str(x)) for x in range(0, 11)]
+  riego_semana = fields.Selection(riegos, default='0', string="Nº riegos por semana")
+
   tipo_riego = fields.Selection([
     ('aspersion', 'Aspersion'),
     ('graverdad', 'Gravedad'),
     ('otros', 'otros'),
   ], default="aspersion", string="Tipo de riego")
 
-  num_corte = fields.Integer(string="Nº corte o pastoreo/año")
-  
+
+  cortes = [(x, str(x)) for x in range(0, 100)]
+  num_corte = fields.Selection(cortes, default='0', string="Nº corte o pastoreo/año")
   
   #Rendimiento
-  peso_x_m2 = fields.Float(string="Peso por m2")
-  densidad = fields.Float(string="Densidad")
-  longitud = fields.Float(string="Longitud")
+  peso_x_m2 = fields.Float(string="Peso por m2 (kg)")
+  densidad = fields.Float(string="Densidad (g/cm3)")
+  longitud = fields.Float(string="Longitud (m)")
   
   # Fuente de agua
   fuente_agua = fields.Selection([
@@ -83,11 +101,11 @@ class potrero(models.Model):
   # Campo computado
   num_camelidos = fields.Integer(string="Cantidad camelidos", compute="count_camelidos", store=True)
   
-  area_bofedales = fields.Float("Area de bofedales totales")
-  area_ereazeos = fields.Float("Area de zonas ereazeos totales")
+  area_bofedales = fields.Float("Area de bofedales totales (Ha)")
+  area_ereazeos = fields.Float("Area de zonas ereazeos totales (Ha)")
   otros = fields.Float("Otros")     # Falta definir
-  
-  
+
+  # Campos relacionales
   parcela_id = fields.Many2one('coop2.parcela', string="Parcela", required=True)
   
   camelidos = fields.One2many('coop2.camelido', 'potrero_id', string="Camelidos")

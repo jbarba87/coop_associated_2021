@@ -53,28 +53,49 @@ class camelido_andino(models.Model):
   cod_abuela = fields.Many2one('coop2.camelido', string="Código de la abuela")
   cod_bisabuelo = fields.Many2one('coop2.camelido', string="Código del bisabuelo")
   cod_bisabuela = fields.Many2one('coop2.camelido', string="Código de la bisabuela")
-#  socio_id = fields.Many2one('coop2.socio', string="Socio Propietario", required = True)
   
   sexo = fields.Selection([
     ('macho', 'Macho'),
     ('hembra', 'Hembra'),
   ], default="macho", string="Género")
   
-  raza = fields.Char(string="Raza")
-  color = fields.Char(string="Color")
-  categoria = fields.Char(string="Categoria")
+  raza = fields.Selection([
+    ('huacayo', 'Huacayo'),
+    ('suri', 'Suri'),
+    ('raza 3', 'Raza 3'),
+    ('raza 4', 'Raza 4'),
+  ], string="Raza")
+  
+  color = fields.Selection([
+    ('blanco', 'blanco'),
+    ('color 2', 'Color 2'),
+    ('color 3', 'Color 3'),
+    ('color 4', 'Color 4'),
+  ], string="Color")
 
-  esquila = fields.Selection([
-    ('si', 'Sí'),
-    ('no', 'No'),
-  ], default="no", string="Esquila")
-  num_esquila = fields.Integer(string="Número de esquila")
+  categoria = fields.Selection([
+    ('categoria 1', 'Categoria 1'),
+    ('categoria 2', 'Categoria 2'),
+    ('categoria 3', 'Categoria 3'),
+    ('categoria 4', 'Categoria 4'),
+  ], string="Categoria")
+
+  cond_adquisicion = fields.Selection([
+    ('alquilado', 'Alquilado'),
+    ('comprado', 'Comprado'),
+    ('trueque', 'Trueque'),
+    ('prestado', 'Prestado'),
+  ], string="Condición de adquisición")
+
+  esquila = fields.Selection([('si', 'Sí'), ('no', 'No')], default="no", string="Esquila")
+
+  num_esquila = fields.Selection([(x, str(x)) for x in range(0, 6)], default='0', string="Número de esquila")
 
 # Caracteristicas del Vellon
   # Propiedades fisicas
   diametro = fields.Float(string="Diámetro")
   longitud_mecha = fields.Float(string="Longitud de mecha")
-  rizo_ondulacion = fields.Float(string="Rizo o ondulación")
+  rizo_ondulacion = fields.Float(string="Rizo u ondulación")
   resistencia_tenacidad = fields.Float(string="Resistencia o tenacidad")
   lustre_brillo = fields.Float(string="Lustre o brillo")
   grasa = fields.Float(string="Grasa")

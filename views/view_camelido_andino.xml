@@ -39,6 +39,7 @@
               <field name="raza"/>
               <field name="color"/>
               <field name="categoria"/>
+              <field name="cond_adquisicion"/>
               <field name="esquila" widget="radio"/>
               <field name="num_esquila" attrs="{'invisible':[('esquila', '==', 'no')]}"/>
             </group>
