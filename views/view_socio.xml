@@ -43,6 +43,7 @@
     <record id="socio_graph" model="ir.ui.view">
       <field name="name">coop2.socio_camelido</field>
       <field name="model">res.partner</field>
+      <field name="type">graph</field>
       <field name="arch" type="xml">
         <graph string="Gráfica">
           <field name="name"/>

@@ -11,25 +11,25 @@ class socio(models.Model):
   
   # Funcion que cuenta el nuemro de camelidos del socio
   @api.one
-  @api.depends('num_camelidos')
+  @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
   def contar_camelidos(self):
     self.num_camelidos = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id)])
-#self.num_parcelas = self.env["coop2.parcela"].search_count([('cabana_id', '=', self.id)])
     print("          Cantidad camelidos", self.num_camelidos)
 
   @api.one
-  @api.depends('num_cabanas')
+  @api.depends('cabanas.socio_id')
   def contar_cabanas(self):
-    self.num_cabanas = self.env["coop2.cabana"].search_count([('socio_id', '=', self.id)])
+    if self.cabanas is not False:
+      self.num_cabanas = self.env["coop2.cabana"].search_count([('socio_id', '=', self.id)])
 
   @api.one
-  @api.depends('num_parcelas')
+  @api.depends('cabanas.parcelas.socio_id')
   def contar_parcelas(self):
     self.num_parcelas = self.env["coop2.parcela"].search_count([('socio_id', '=', self.id)])
 
 
   @api.one
-  @api.depends('num_potreros')
+  @api.depends('cabanas.parcelas.potreros.socio_id')
   def contar_potreros(self):
     self.num_potreros = self.env["coop2.potrero"].search_count([('socio_id', '=', self.id)])
 
@@ -40,7 +40,7 @@ class socio(models.Model):
   
   # Campos computados para estadistica
   # Si se coloca store=True aoarece 0 en el formulario (averiguar porquee)
-  num_camelidos = fields.Integer(string="Numero de camelidos", compute="contar_camelidos")
-  num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas")
-  num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas")
-  num_potreros = fields.Integer(string="Numero de potreros", compute="contar_potreros")
+  num_camelidos = fields.Integer(string="Numero de camelidos", compute="contar_camelidos", store=True)
+  num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas", store=True)
+  num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas", store=True)
+  num_potreros = fields.Integer(string="Numero de potreros", compute="contar_potreros", store=True)

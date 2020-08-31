@@ -1,13 +1,11 @@
 <odoo>
-<!--
-  <record id="act_potrero_camelido" model="ir.actions.act_window">
-    <field name="name">Potrero camelido</field>
-    <field name="res_model">coop2.potrero</field>
-    <field name="view_mode">graph</field>
-    <field name="view_id" ref="coop2.potrero_graph" />
-  
-  </record>
 
+  <record id="act_socio_camelido" model="ir.actions.act_window">
+    <field name="name">Potrero camelido</field>
+    <field name="res_model">res.partner</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="coop2.socio_graph"/>
+  </record>
 
   <record id="dashboard_form_view" model="ir.ui.view">
     <field name="name">Dashboard Form </field>
@@ -15,16 +13,14 @@
     <field name="type">form</field>
     <field name="arch" type="xml">
       <form string="Dashboard">
-        <board style="1-2">
+        <board style="3">
           <column>
-            <action string="Grafico" name="coop2.act_potrero_camelido"/>
+            <action string="Grafico" name="%(coop2.act_socio_camelido)d" domain="[('es_socio', '=', True)]"/>
           </column>
         </board>
       </form>
     </field>
- </record>
-
-
+  </record>
 
   <record id="coop2_dashboard" model="ir.actions.act_window">
     <field name="name">Dashboard</field>
@@ -34,10 +30,6 @@
     <field name="view_id" ref="dashboard_form_view"/>
   </record>
 
-
-
   <menuitem name="Dashboard" id="menu_dashboard" sequence="-1" parent="coop_root" action="coop2_dashboard" />
-
--->
 
 </odoo>
