@@ -31,8 +31,7 @@ class cabana(models.Model):
 
   nombre = fields.Char(string = "Nombre", required = True)
   
-  #comunidad = fields.Char(string = "Comunidad/Asociacion")
-  
+
   distrito_cab = fields.Char(string = "Distrito")
   provincia_cab = fields.Char(string = "Provincia")
   
@@ -42,7 +41,6 @@ class cabana(models.Model):
     
   departamentos = [ (d['departamento'], d['departamento']) for d in data ]
   departamento_cab = fields.Selection(departamentos, string = "Departamento")
-  #departamento_cab = fields.Char(string = "Departamento")
   
   via_acceso = fields.Char(string = "Via de acceso")
   distancia_capital = fields.Integer(string = "Dist. desde capital Distrital (Kms)")

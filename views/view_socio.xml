@@ -7,31 +7,63 @@
       <field name="model">res.partner</field>
       <field name="inherit_id" ref="base.view_partner_form"/>
       <field name="arch" type="xml">
-        <xpath expr="//field[@name='vat']" position="after">
-          <field name="es_socio"/>
+        <xpath expr="//field[@name='street']" position="before">
+          <field name="direccion"/>
         </xpath>
-        <xpath expr="//page[3]" position="after">
+        <xpath expr="//field[@name='street']" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+        <xpath expr="//field[@name='street2']" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+        <xpath expr="//field[@name='city']" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+        <xpath expr="//field[@name='state_id']" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+        <xpath expr="//field[@name='zip']" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+        <xpath expr="//field[@name='country_id']" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
+        <xpath expr="//field[@name='vat']" position="attributes">
+          <attribute name="invisible">True</attribute>
+        </xpath>
 
+        <xpath expr="//field[@name='type']" position="before">
+          <field name="dni"/>
+          <field name="fecha_nac"/>
+          <field name="sexo"/>
+          <field name="estado_civil"/>
+          <field name="es_socio"/>
+          <field name="departamento_nac"/>
+          <field name="provincia_nac"/>
+          <field name="distrito_nac"/>
+        </xpath>
+
+        <xpath expr="//page[3]" position="after">
           <page string="Cabañas del socio" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
-              <field name="cabanas">
-                <tree editable="bottom">
-                  <field name="nombre"/>
-                  <field name="comunidad"/>
-                  <field name="distrito_cab"/>
-                  <field name="provincia_cab"/>
-                  <field name="departamento_cab"/>
-                  <field name="socio_id" invisible="1"/> 
-                </tree>
-              </field>
-            </group>
-          </page>
-          <page string="Resumen" attrs="{'invisible':[('es_socio', '==', False)]}">
-            <group>
-              <field name="num_camelidos"/>
-              <field name="num_cabanas"/>
-              <field name="num_parcelas"/>
-              <field name="num_potreros"/>
+              <group>
+                <field name="num_camelidos"/>
+                <field name="num_cabanas"/>
+                <field name="num_parcelas"/>
+                <field name="num_potreros"/>
+              </group>
+              <group>
+                <field name="cabanas">
+                  <tree editable="bottom">
+                    <field name="nombre"/>
+                    <field name="comunidad"/>
+                    <field name="distrito_cab"/>
+                    <field name="provincia_cab"/>
+                    <field name="departamento_cab"/>
+                    <field name="socio_id" invisible="1"/> 
+                  </tree>
+                </field>
+              </group>
             </group>
           </page>
           <page string="Características de los camélidos" attrs="{'invisible':[('es_socio', '==', False)]}">
@@ -39,7 +71,6 @@
               <group>
                 <field name="num_camelidos"/>
               </group>
-
               <group>
                 <field name="num_alpacas_huacayo"/>
                 <field name="num_alpacas_suri"/>
@@ -48,7 +79,17 @@
                 <field name="num_alpacas_macho"/>
                 <field name="num_alpacas_hembra"/>
               </group>
-
+            </group>
+          </page>
+          <page string="Caracteristicas del domicilio" attrs="{'invisible':[('es_socio', '==', False)]}">
+            <group>
+              <group>
+                <field name="dom_permanente"/>
+                <field name="dom_transitorio"/>
+                <field name="personas_nucleo"/>
+                <field name="num_hijos"/>
+                <field name="num_hijas"/>
+              </group>
             </group>
           </page>
         </xpath>

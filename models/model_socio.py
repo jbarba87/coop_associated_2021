@@ -2,12 +2,17 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-
+import json
 from datetime import datetime, timedelta
 
 class socio(models.Model):
 
   _inherit = "res.partner"
+
+
+  _sql_constraints = [
+    ('DNI_unico', 'unique (dni)', 'Ya existe un socio con ese número de DNI.')
+  ]
   
   # Funcion que cuenta el nuemro de camelidos del socio
   @api.one
@@ -70,3 +75,54 @@ class socio(models.Model):
   num_alpacas_macho = fields.Integer(string="Alpacas Macho", compute="contar_machos", store=True)
   num_alpacas_hembra = fields.Integer(string="Alpacas Hembra", compute="contar_hembras", store=True)
  
+ 
+  # Campos personales y sus funciones
+  @api.constrains('dni')
+  def check_dni(self):
+    for rec in self:
+      if len(rec.dni) < 8:
+        raise ValidationError('El campo DNI debe tener 8 digitos.')
+      if not rec.dni.isnumeric():
+        raise ValidationError('El campo DNI solo debe contener números.')
+ 
+ 
+ 
+ 
+  # Campos personales
+  dni = fields.Char(string="DNI", size=8, required=True)
+  fecha_nac = fields.Date(string="Fecha de nacimiento")
+  direccion = fields.Char(string="Dirección", size=30)
+  
+  # Lugar de nacimiento
+  distrito_nac = fields.Char(string = "Distrito")
+  provincia_nac = fields.Char(string = "Provincia")
+  
+  # Importar departamentos
+  with open('/opt/odoo/odoo/addons/coop2/models/dep.txt', 'r') as dptos:
+    data = json.load(dptos)
+    
+  departamentos = [ (d['departamento'], d['departamento']) for d in data ]
+  departamento_nac = fields.Selection(departamentos, string = "Departamento")
+
+  # Otros datos
+  sexo = fields.Selection([('masculino', 'Masculino'), ('femenino', 'Femenino')], default="masculino", string="Sexo")
+  
+  estado_civil = fields.Selection([
+  ('soltero', 'Soltero'),
+  ('casado', 'Casado'),
+  ('viudo', 'Viudo'),
+  ('divorciado', 'Divorciado'),
+  ], default="soltero", string="Estado Civil")
+  
+  # Domicilio
+  dom_permanente = fields.Char(size=30)
+  dom_transitorio = fields.Char(size=30)
+  
+  num = [(x, str(x)) for x in range(1, 20)]
+  personas_nucleo = fields.Selection(num, string="Personas nucleo familiar")
+  
+  
+  num = [(x, str(x)) for x in range(1, 10)]
+  num_hijos = fields.Selection(num, string="Número de hijos")
+  num_hijas = fields.Selection(num, string="Número de hijas")
+
