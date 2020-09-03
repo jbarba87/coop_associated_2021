@@ -47,12 +47,12 @@
           <notebook>
             <page string="Antepasados">
               <group>
-                <field name="cod_padre" domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]"/>
-                <field name="cod_madre" domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion)]"/>
-                <field name="cod_abuelo" domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]"/>
-                <field name="cod_abuela" domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]"/>
-                <field name="cod_bisabuelo" domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion )]"/>
-                <field name="cod_bisabuela" domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]"/>
+                <field name="cod_padre"/>
+                <field name="cod_madre"/>
+                <field name="cod_abuelo"/>
+                <field name="cod_abuela"/>
+                <field name="cod_bisabuelo"/>
+                <field name="cod_bisabuela"/>
               </group>
             </page>
             <page string="Características del Vellón">
@@ -84,6 +84,12 @@
             </page>
           </notebook>
         </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="activity_ids" widget="mail_activity"/>
+          <field name="message_ids" widget="mail_thread" option="{'post_refresh':'recipients'}"/>
+          
+        </div>
       </form>
     </field>
   </record>

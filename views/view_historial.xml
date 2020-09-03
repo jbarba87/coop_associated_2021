@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="historial_graph" model="ir.ui.view">
+      <field name="name">coop2.historial_camelidos</field>
+      <field name="model">coop2.historial</field>
+      <field name="type">graph</field>
+      <field name="arch" type="xml">
+        <graph string="Gráfica">
+          <field name="fecha_muestreo"/>
+          <field name="num_camelidos" />
+        <graph>
+      </field>
+    </record>
+  </data>
+</odoo>

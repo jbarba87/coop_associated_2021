@@ -7,3 +7,4 @@ from . import model_asociacion
 from . import model_parcela
 from . import model_potrero
 from . import model_camelido
+from . import model_historial

@@ -125,4 +125,7 @@ class socio(models.Model):
   num = [(x, str(x)) for x in range(1, 10)]
   num_hijos = fields.Selection(num, string="Número de hijos")
   num_hijas = fields.Selection(num, string="Número de hijas")
+  
+  # Campo relacional al historial del socio
+  historial = fields.One2many('coop2.historial', 'socio_id', string="Historial")
 

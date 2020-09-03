@@ -79,6 +79,14 @@
                 <field name="num_alpacas_macho"/>
                 <field name="num_alpacas_hembra"/>
               </group>
+              <field name="historial">
+                <tree editable="bottom"> 
+                  <field name="fecha_muestreo"/>
+                  <field name="num_camelidos_macho"/>
+                  <field name="num_camelidos_hembra"/>
+                  <field name="num_camelidos"/>
+                </tree>
+              </field>
             </group>
           </page>
           <page string="Caracteristicas del domicilio" attrs="{'invisible':[('es_socio', '==', False)]}">

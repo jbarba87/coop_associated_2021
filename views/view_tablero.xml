@@ -13,7 +13,7 @@
     <field name="type">form</field>
     <field name="arch" type="xml">
       <form string="Dashboard">
-        <board style="3">
+        <board style="2-1">
           <column>
             <action string="Grafico" name="%(coop2.act_socio_camelido)d" domain="[('es_socio', '=', True)]"/>
           </column>

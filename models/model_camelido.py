@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 class camelido_andino(models.Model):
   _name = "coop2.camelido"
   _description = "Camelido Andino"
+  _inherit = ['mail.thread', 'mail.activity.mixin'] # for Chatter
   _rec_name = "identificacion"
   
   @api.one
@@ -30,7 +31,7 @@ class camelido_andino(models.Model):
     if self.potrero_id is not False:
       socio = self.potrero_id.parcela_id.cabana_id.socio_id
       self.socio_id = socio.id
-  identificacion = fields.Char(string="Número", required=True)
+  identificacion = fields.Char(string="Número", required=True, track_visibility="always")
 
   fecha_empadre = fields.Date(string="Fecha de empadre")
   fecha_nac = fields.Date(string="Fecha de naciomiento")
@@ -42,17 +43,17 @@ class camelido_andino(models.Model):
     ('arete', 'Arete'),
     ('senal', 'Señal'),
     ('otro', 'Otro'),
-  ], default="tatuaje", string="Tipo de identificación")
+  ], default="tatuaje", string="Tipo de identificación", track_visibility="always")
 
 
 
   # Campos relacionales
-  cod_padre = fields.Many2one('coop2.camelido', string="Código del padre")
-  cod_madre = fields.Many2one('coop2.camelido', string="Código de la madre")
-  cod_abuelo = fields.Many2one('coop2.camelido', string="Código del abuelo")
-  cod_abuela = fields.Many2one('coop2.camelido', string="Código de la abuela")
-  cod_bisabuelo = fields.Many2one('coop2.camelido', string="Código del bisabuelo")
-  cod_bisabuela = fields.Many2one('coop2.camelido', string="Código de la bisabuela")
+  cod_padre = fields.Many2one('coop2.camelido', string="Código del padre", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]" )
+  cod_madre = fields.Many2one('coop2.camelido', string="Código de la madre", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
+  cod_abuelo = fields.Many2one('coop2.camelido', string="Código del abuelo", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]" )
+  cod_abuela = fields.Many2one('coop2.camelido', string="Código de la abuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
+  cod_bisabuelo = fields.Many2one('coop2.camelido', string="Código del bisabuelo", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]")
+  cod_bisabuela = fields.Many2one('coop2.camelido', string="Código de la bisabuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
   
   sexo = fields.Selection([
     ('macho', 'Macho'),
@@ -128,7 +129,7 @@ class camelido_andino(models.Model):
   
   
   # Campo potrero
-  potrero_id = fields.Many2one('coop2.potrero', string="Potrero")
+  potrero_id = fields.Many2one('coop2.potrero', string="Potrero", track_visibility="always")
   
   
   # obtencion del socio
