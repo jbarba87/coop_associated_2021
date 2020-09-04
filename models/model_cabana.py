@@ -35,15 +35,16 @@ class cabana(models.Model):
 
   distrito_cab = fields.Char(string = "Distrito")
   provincia_cab = fields.Char(string = "Provincia")
+  departamento_cab = fields.Char(string = "Departamento")
   
-  archive = os.getcwd() + '/addons/coop2/models/dep.txt'
+  #archive = os.getcwd() + '/addons/coop2/models/dep.txt'
   
   # Importar departamentos
-  with open(archive, 'r') as dptos:
-    data = json.load(dptos)
+  #with open(archive, 'r') as dptos:
+  #  data = json.load(dptos)
     
-  departamentos = [ (d['departamento'], d['departamento']) for d in data ]
-  departamento_cab = fields.Selection(departamentos, string = "Departamento")
+  #departamentos = [ (d['departamento'], d['departamento']) for d in data ]
+  #departamento_cab = fields.Selection(departamentos, string = "Departamento")
   
   via_acceso = fields.Char(string = "Via de acceso")
   distancia_capital = fields.Integer(string = "Dist. desde capital Distrital (Kms)")

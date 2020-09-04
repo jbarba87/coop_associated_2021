@@ -96,15 +96,16 @@ class socio(models.Model):
   # Lugar de nacimiento
   distrito_nac = fields.Char(string = "Distrito")
   provincia_nac = fields.Char(string = "Provincia")
+  departamento_nac = fields.Char(string = "Departamento")
   
-  archive = os.getcwd() + '/addons/coop2/models/dep.txt'
+  #archive = os.getcwd() + '/addons/coop2/models/dep.txt'
   
   # Importar departamentos
-  with open(archive, 'r') as dptos:
-    data = json.load(dptos)
+  #with open(archive, 'r') as dptos:
+  #  data = json.load(dptos)
     
-  departamentos = [ (d['departamento'], d['departamento']) for d in data ]
-  departamento_nac = fields.Selection(departamentos, string = "Departamento")
+  #departamentos = [ (d['departamento'], d['departamento']) for d in data ]
+  #departamento_nac = fields.Selection(departamentos, string = "Departamento")
 
   # Otros datos
   sexo = fields.Selection([('masculino', 'Masculino'), ('femenino', 'Femenino')], default="masculino", string="Sexo")
