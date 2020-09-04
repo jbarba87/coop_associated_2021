@@ -4,7 +4,7 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 import json
 from datetime import datetime, timedelta
-
+import os
 class socio(models.Model):
 
   _inherit = "res.partner"
@@ -97,8 +97,10 @@ class socio(models.Model):
   distrito_nac = fields.Char(string = "Distrito")
   provincia_nac = fields.Char(string = "Provincia")
   
+  archive = os.getcwd() + '/addons/coop2/models/dep.txt'
+  
   # Importar departamentos
-  with open('/opt/odoo/odoo/addons/coop2/models/dep.txt', 'r') as dptos:
+  with open(archive, 'r') as dptos:
     data = json.load(dptos)
     
   departamentos = [ (d['departamento'], d['departamento']) for d in data ]

@@ -5,6 +5,7 @@ from odoo.exceptions import ValidationError
 
 from datetime import datetime, timedelta
 import json
+import os
 
 class cabana(models.Model):
   _name = "coop2.cabana"
@@ -35,8 +36,10 @@ class cabana(models.Model):
   distrito_cab = fields.Char(string = "Distrito")
   provincia_cab = fields.Char(string = "Provincia")
   
+  archive = os.getcwd() + '/addons/coop2/models/dep.txt'
+  
   # Importar departamentos
-  with open('/opt/odoo/odoo/addons/coop2/models/dep.txt', 'r') as dptos:
+  with open(archive, 'r') as dptos:
     data = json.load(dptos)
     
   departamentos = [ (d['departamento'], d['departamento']) for d in data ]

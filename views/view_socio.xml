@@ -88,6 +88,13 @@
                 </tree>
               </field>
             </group>
+            <!--
+            <group>
+              <graph string="Prueba" type="bar">
+                <field name="num_alpacas_huacayo" type="measure" />
+                
+              </graph>
+            </group> -->
           </page>
           <page string="Caracteristicas del domicilio" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
