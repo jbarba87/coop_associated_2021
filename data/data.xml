@@ -1,0 +1,128 @@
+<odoo>
+  <data>
+  
+    <!-- Socios -->
+    <record id="socio1" model="res.partner">
+      <field name="name">Juan</field>
+      <field name="dni">12344321</field>
+      <field name="es_socio" eval="True"/>
+    </record>
+
+    <record id="socio2" model="res.partner">
+      <field name="name">Pedro</field>
+      <field name="dni">33333333</field>
+      <field name="es_socio" eval="True"/>
+    </record>
+
+    <!-- Cabañas -->
+    <record id="cab1" model="coop2.cabana">
+      <field name="nombre">Cabaña 1</field>
+      <field name="socio_id" ref="coop2.socio1"/>
+    </record>
+    <record id="cab2" model="coop2.cabana">
+      <field name="nombre">Cabaña 2</field>
+      <field name="socio_id" ref="coop2.socio1"/>
+    </record>
+    <record id="cab3" model="coop2.cabana">
+      <field name="nombre">Cabaña 3</field>
+      <field name="socio_id" ref="coop2.socio1"/>
+    </record>
+    
+    <record id="cab5" model="coop2.cabana">
+      <field name="nombre">Cabaña 4</field>
+      <field name="socio_id" ref="coop2.socio2"/>
+    </record>
+    <record id="cab6" model="coop2.cabana">
+      <field name="nombre">Cabaña 5 </field>
+      <field name="socio_id" ref="coop2.socio2"/>
+    </record>
+    
+    <!-- Parcelas -->
+    <record id="parc1" model="coop2.parcela">
+      <field name="nombre_parcela">Parcela 1</field>
+      <field name="cabana_id" ref="coop2.cab5"/>
+    </record>
+
+    <record id="parc2" model="coop2.parcela">
+      <field name="nombre_parcela">Parcela 2</field>
+      <field name="cabana_id" ref="coop2.cab1"/>
+    </record>
+
+
+
+    <!-- Potrero -->
+    <record id="potr1" model="coop2.potrero">
+      <field name="nombre_potrero">Potrero 1</field>
+      <field name="parcela_id" ref="coop2.parc1"/>
+    </record>
+
+    <record id="potr2" model="coop2.potrero">
+      <field name="nombre_potrero">Potrero 2</field>
+      <field name="parcela_id" ref="coop2.parc2"/>
+    </record>
+
+    <record id="potr3" model="coop2.potrero">
+      <field name="nombre_potrero">Potrero 3</field>
+      <field name="parcela_id" ref="coop2.parc2"/>
+    </record>
+
+    <!-- Camelidos -->
+    <record id="cam1" model="coop2.camelido">
+      <field name="identificacion">Camelido 1</field>
+      <field name="potrero_id" ref="coop2.potr1"/>
+      <field name="sexo">macho</field>
+    </record>
+
+    <record id="cam2" model="coop2.camelido">
+      <field name="identificacion">Camelido 2</field>
+      <field name="potrero_id" ref="coop2.potr1"/>
+      <field name="sexo">hembra</field>
+    </record>
+
+    <record id="cam3" model="coop2.camelido">
+      <field name="identificacion">Camelido 3</field>
+      <field name="potrero_id" ref="coop2.potr1"/>
+      <field name="sexo">macho</field>
+    </record>
+
+    <record id="cam4" model="coop2.camelido">
+      <field name="identificacion">Camelido 4</field>
+      <field name="potrero_id" ref="coop2.potr2"/>
+      <field name="sexo">macho</field>
+    </record>
+
+    <record id="cam5" model="coop2.camelido">
+      <field name="identificacion">Camelido 5</field>
+      <field name="potrero_id" ref="coop2.potr2"/>
+      <field name="sexo">hembra</field>
+    </record>
+    
+    <record id="cam6" model="coop2.camelido">
+      <field name="identificacion">Camelido 6</field>
+      <field name="potrero_id" ref="coop2.potr2"/>
+      <field name="sexo">hembra</field>
+    </record>
+    
+    
+    <!-- historial, fecha: YYYY-MM-DD -->
+    <record id="hist1" model="coop2.historial">
+      <field name="fecha_muestreo">2020-01-01</field>
+      <field name="socio_id" ref="socio1"/>
+      <field name="num_camelidos">10</field>
+    </record>
+
+    <record id="hist2" model="coop2.historial">
+      <field name="fecha_muestreo">2020-02-01</field>
+      <field name="socio_id" ref="socio1"/>
+      <field name="num_camelidos">20</field>
+    </record>
+
+    <record id="hist3" model="coop2.historial">
+      <field name="fecha_muestreo">2020-03-01</field>
+      <field name="socio_id" ref="socio1"/>
+      <field name="num_camelidos">30</field>
+    </record>
+    
+  </data>
+
+</odoo>

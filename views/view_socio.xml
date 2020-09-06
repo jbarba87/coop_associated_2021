@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-
+  
+    <!-- view para el boton-->
+    <record model="ir.actions.act_window" id="open_prueba">
+      <field name="name">Grafica</field>
+      <field name="res_model">coop2.historial</field>
+      <field name="view_mode">graph</field>
+      <field name="domain">[('socio_id', '=', active_id)]</field>
+      <field name="context">{}</field>
+    </record>
+  
     <record id="view_socio_form" model="ir.ui.view">
       <field name="name">res.partner.inherit</field>
       <field name="model">res.partner</field>
@@ -79,6 +88,9 @@
                 <field name="num_alpacas_macho"/>
                 <field name="num_alpacas_hembra"/>
               </group>
+              
+              <button name="%(open_prueba)d" string="Mostrar historial" type="action" class="oe_highlight"/>
+
               <field name="historial">
                 <tree editable="bottom"> 
                   <field name="fecha_muestreo"/>
@@ -88,13 +100,6 @@
                 </tree>
               </field>
             </group>
-            <!--
-            <group>
-              <graph string="Prueba" type="bar">
-                <field name="num_alpacas_huacayo" type="measure" />
-                
-              </graph>
-            </group> -->
           </page>
           <page string="Caracteristicas del domicilio" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
@@ -110,9 +115,21 @@
         </xpath>
       </field>
     </record>
-    
-    
-    <!-- graph view -->
+
+    <record id="socio_camelido_graph" model="ir.ui.view">
+      <field name="name">coop2.socio_camelido</field>
+      <field name="model">res.partner</field>
+      <field name="type">graph</field>
+      <field name="arch" type="xml">
+        <graph string="Gráfica">
+          <field name="name"/>
+          <field name="num_camelidos" type="measure"/>
+        </graph>
+      </field>
+    </record>
+  
+    <!-- graph views -->
+    <!--
     <record id="socio_graph" model="ir.ui.view">
       <field name="name">coop2.socio_camelido</field>
       <field name="model">res.partner</field>
@@ -125,8 +142,21 @@
       </field>
     </record>
 
+
+    <record id="historial_graph" model="ir.ui.view">
+      <field name="name">coop2.historial_camelido</field>
+      <field name="model">coop2.historial</field>
+      <field name="type">graph</field>
+      <field name="arch" type="xml">
+        <graph string="Gráfica">
+          <field name="fecha_muestreo"/>
+          <field name="num_camelidos" type="measure"/>
+        </graph>
+      </field>
+    </record>-->
     
     
+    <!-- Filter View
     <record id="view_res_partner_inherit_rearch" model="ir.ui.view">
       <field name="name">res.partner.search.expand.filter</field>
       <field name="model">res.partner</field>
@@ -138,28 +168,28 @@
       </field>
     </record>
     
-    
+    -->
     
     
     <record id="action_socio" model="ir.actions.act_window">
-    <field name="name">Socios</field>
-    <field name="type">ir.actions.act_window</field>
-    <field name="res_model">res.partner</field>
-    <field name="context"> {"search_default_filter_socio":1} </field> <!-- search_default_<filter name>  -->
-    <field name="view_type">form</field>
-    <field name="view_mode">kanban,tree,form,graph</field>
-    <field name="help" type="html">
-      <p class="o_view_nocontent_smiling_face">
-        Agrege un socio.        
-      </p>
-    </field>
-  </record>
-    
-    
-    
-    
+      <field name="name">Socios</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">res.partner</field>
+     <!-- <field name="context"> {"search_default_filter_socio":1} </field>  search_default_<filter name>  -->
+      <field name="context">{}</field>
+      <field name="domain">[('es_socio', '=', True)]</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">kanban,tree,form,graph</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Agrege un socio.        
+        </p>
+      </field>
+    </record>
+        
     <menuitem id="coop_root" name="Coopecan 2" sequence="" />
     <menuitem id="coop_socio" name="Socios"  sequence="0"  parent="coop_root" action="action_socio"/>
+
   </data>
 
 </odoo>

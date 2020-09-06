@@ -44,7 +44,6 @@ class socio(models.Model):
   
   
   # Campos computados para estadistica
-  # Si se coloca store=True aoarece 0 en el formulario (averiguar porquee)
   num_camelidos = fields.Integer(string="Numero de camelidos", compute="contar_camelidos", store=True)
   num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas", store=True)
   num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas", store=True)

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
+
     <record id="historial_graph" model="ir.ui.view">
       <field name="name">coop2.historial_camelidos</field>
       <field name="model">coop2.historial</field>
@@ -12,5 +13,18 @@
         </graph>
       </field>
     </record>
+<!--  
+    <record id="action_socio_historial" model="ir.actions.act_window">
+      <field name="name">Historial</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">res.partner</field>
+      <field name="domain">[]</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">graph</field>
+      <field name="view_id" ref="coop2.historial_graph"/>
+      <field name="model_id" ref="coop2.view_socio_form"/>
+    </record>
+-->    
+    
   </data>
 </odoo>

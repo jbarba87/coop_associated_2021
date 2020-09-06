@@ -1,18 +1,12 @@
 <odoo>
 
+   <!--graph para el socio y camelido del modelo historial -->
+  
   <record id="act_socio_camelido" model="ir.actions.act_window">
-    <field name="name">Potrero camelido</field>
+    <field name="name">Socio camelido</field>
     <field name="res_model">res.partner</field>
     <field name="view_mode">graph</field>
-    <field name="view_id" ref="coop2.socio_graph"/>
-  </record>
-
-  <!-- graph para el socio y camelido del modelo historial -->
-  <record id="act_hist_camelido" model="ir.actions.act_window">
-    <field name="name">Socio camelido</field>
-    <field name="res_model">coop2.historial</field>
-    <field name="view_mode">graph</field>
-    <field name="view_id" ref="coop2.historial_graph"/>
+    <field name="view_id" ref="coop2.socio_camelido_graph"/>
   </record>
 
   <record id="dashboard_form_view" model="ir.ui.view">
@@ -26,12 +20,12 @@
             <action string="Grafico" name="%(coop2.act_socio_camelido)d" domain="[('es_socio', '=', True)]"/>
           </column>
           <column>
-            <action string="grafico" name="%(coop2.act_hist_camelido)d" domain="[('socio_id', '=', 7)]" />
           </column>
         </board>
       </form>
     </field>
   </record>
+
 
   <record id="coop2_dashboard" model="ir.actions.act_window">
     <field name="name">Dashboard</field>
@@ -41,6 +35,6 @@
     <field name="view_id" ref="dashboard_form_view"/>
   </record>
 
-  <menuitem name="Dashboard" id="menu_dashboard" sequence="-1" parent="coop_root" action="coop2_dashboard" />
+  <menuitem name="Tablero" id="menu_dashboard" sequence="-1" parent="coop_root" action="coop2_dashboard" />
 
 </odoo>

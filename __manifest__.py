@@ -35,6 +35,7 @@
         'views/view_camelido_andino.xml',
         'views/view_historial.xml',
         'views/view_tablero.xml',
+        'data/data.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
