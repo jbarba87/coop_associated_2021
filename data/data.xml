@@ -1,7 +1,7 @@
 <odoo>
   <data>
   
-    <!-- Socios -->
+    <!-- Socios 
     <record id="socio1" model="res.partner">
       <field name="name">Juan</field>
       <field name="dni">12344321</field>
@@ -13,30 +13,51 @@
       <field name="dni">33333333</field>
       <field name="es_socio" eval="True"/>
     </record>
+-->
+    <record id="base.res_partner_address_15" model="res.partner">
+      <field name="es_socio" eval="True"/>
+      <field name="dni">12345678</field>
+    </record>
+
+    <record id="base.res_partner_address_28" model="res.partner">
+      <field name="es_socio" eval="True"/>
+      <field name="dni">87654321</field>
+    </record>
+
+
+    <record id="base.res_partner_address_3" model="res.partner">
+      <field name="es_socio" eval="True"/>
+      <field name="dni">11223344</field>
+    </record>
 
     <!-- Cabañas -->
     <record id="cab1" model="coop2.cabana">
       <field name="nombre">Cabaña 1</field>
-      <field name="socio_id" ref="coop2.socio1"/>
+      <field name="socio_id" ref="base.res_partner_address_15"/>
     </record>
     <record id="cab2" model="coop2.cabana">
       <field name="nombre">Cabaña 2</field>
-      <field name="socio_id" ref="coop2.socio1"/>
+      <field name="socio_id" ref="base.res_partner_address_15"/>
     </record>
     <record id="cab3" model="coop2.cabana">
       <field name="nombre">Cabaña 3</field>
-      <field name="socio_id" ref="coop2.socio1"/>
+      <field name="socio_id" ref="base.res_partner_address_15"/>
     </record>
     
     <record id="cab5" model="coop2.cabana">
       <field name="nombre">Cabaña 4</field>
-      <field name="socio_id" ref="coop2.socio2"/>
+      <field name="socio_id" ref="base.res_partner_address_28"/>
     </record>
     <record id="cab6" model="coop2.cabana">
       <field name="nombre">Cabaña 5 </field>
-      <field name="socio_id" ref="coop2.socio2"/>
+      <field name="socio_id" ref="base.res_partner_address_28"/>
     </record>
     
+    <record id="cab_douglas" model="coop2.cabana">
+      <field name="nombre">Cabaña 1 de Douglas </field>
+      <field name="socio_id" ref="base.res_partner_address_3"/>
+    </record> 
+
     <!-- Parcelas -->
     <record id="parc1" model="coop2.parcela">
       <field name="nombre_parcela">Parcela 1</field>
@@ -48,7 +69,10 @@
       <field name="cabana_id" ref="coop2.cab1"/>
     </record>
 
-
+    <record id="parc_douglas1" model="coop2.parcela">
+      <field name="nombre_parcela">Parcela 1 de Douglas</field>
+      <field name="cabana_id" ref="coop2.cab_douglas"/>
+    </record>
 
     <!-- Potrero -->
     <record id="potr1" model="coop2.potrero">
@@ -66,63 +90,137 @@
       <field name="parcela_id" ref="coop2.parc2"/>
     </record>
 
+    <record id="potr_douglas1" model="coop2.potrero">
+      <field name="nombre_potrero">Potrero 1 de Douglas</field>
+      <field name="parcela_id" ref="coop2.parc_douglas1"/>
+    </record>
+
+
     <!-- Camelidos -->
     <record id="cam1" model="coop2.camelido">
       <field name="identificacion">Camelido 1</field>
       <field name="potrero_id" ref="coop2.potr1"/>
       <field name="sexo">macho</field>
+      <field name="peso">50.0</field>
     </record>
 
     <record id="cam2" model="coop2.camelido">
       <field name="identificacion">Camelido 2</field>
       <field name="potrero_id" ref="coop2.potr1"/>
       <field name="sexo">hembra</field>
+      <field name="peso">50.0</field>
     </record>
 
     <record id="cam3" model="coop2.camelido">
       <field name="identificacion">Camelido 3</field>
       <field name="potrero_id" ref="coop2.potr1"/>
       <field name="sexo">macho</field>
+      <field name="peso">50.0</field>
     </record>
 
     <record id="cam4" model="coop2.camelido">
       <field name="identificacion">Camelido 4</field>
       <field name="potrero_id" ref="coop2.potr2"/>
       <field name="sexo">macho</field>
+      <field name="peso">50.0</field>
     </record>
 
     <record id="cam5" model="coop2.camelido">
       <field name="identificacion">Camelido 5</field>
       <field name="potrero_id" ref="coop2.potr2"/>
       <field name="sexo">hembra</field>
+      <field name="peso">50.0</field>
     </record>
     
     <record id="cam6" model="coop2.camelido">
       <field name="identificacion">Camelido 6</field>
       <field name="potrero_id" ref="coop2.potr2"/>
       <field name="sexo">hembra</field>
+      <field name="peso">50.0</field>
+    </record>
+
+
+
+
+    <record id="cam_douglas1" model="coop2.camelido">
+      <field name="identificacion">Camelido 1 de Douglas</field>
+      <field name="potrero_id" ref="coop2.potr_douglas1"/>
+      <field name="sexo">macho</field>
+      <field name="peso">50.0</field>
+    </record>
+
+
+
+    <record id="cam_douglas2" model="coop2.camelido">
+      <field name="identificacion">Camelido 2 de Douglas</field>
+      <field name="potrero_id" ref="coop2.potr_douglas1"/>
+      <field name="sexo">hembra</field>
+      <field name="peso">50.0</field>
     </record>
     
+    
+
+    <record id="cam_douglas3" model="coop2.camelido">
+      <field name="identificacion">Camelido 3 de Douglas</field>
+      <field name="potrero_id" ref="coop2.potr_douglas1"/>
+      <field name="cod_padre" ref="coop2.cam_douglas1"/>
+      <field name="cod_padre" ref="coop2.cam_douglas2"/>
+      <field name="sexo">macho</field>
+    </record>
+
+
+    <record id="cam_douglas4" model="coop2.camelido">
+      <field name="identificacion">Camelido 4 de Douglas</field>
+      <field name="potrero_id" ref="coop2.potr_douglas1"/>
+      <field name="cod_padre" ref="coop2.cam_douglas1"/>
+      <field name="cod_padre" ref="coop2.cam_douglas2"/>
+      <field name="sexo">hembra</field>
+    </record>
     
     <!-- historial, fecha: YYYY-MM-DD -->
     <record id="hist1" model="coop2.historial">
       <field name="fecha_muestreo">2020-01-01</field>
-      <field name="socio_id" ref="socio1"/>
+      <field name="socio_id" ref="base.res_partner_address_15"/>
       <field name="num_camelidos">10</field>
     </record>
 
     <record id="hist2" model="coop2.historial">
       <field name="fecha_muestreo">2020-02-01</field>
-      <field name="socio_id" ref="socio1"/>
+      <field name="socio_id" ref="base.res_partner_address_15"/>
       <field name="num_camelidos">20</field>
     </record>
 
     <record id="hist3" model="coop2.historial">
       <field name="fecha_muestreo">2020-03-01</field>
-      <field name="socio_id" ref="socio1"/>
+      <field name="socio_id" ref="base.res_partner_address_15"/>
       <field name="num_camelidos">30</field>
     </record>
+
+
+
+    <!-- potrero historial -->
+    <record id="ptr1_hist1" model="coop2.potrerohist">
+      <field name="fecha">2020-03-01</field>
+      <field name="potrero_id" ref="coop2.potr1"/>
+      <field name="area_pasto_cultivado">15</field>
+      <field name="area_pasto_natural">15</field>
+    </record>
     
+    
+    <record id="ptr1_hist2" model="coop2.potrerohist">
+      <field name="fecha">2020-03-01</field>
+      <field name="potrero_id" ref="coop2.potr1"/>
+      <field name="area_pasto_cultivado">20</field>
+      <field name="area_pasto_natural">15</field>
+    </record>
+
+    <record id="ptr1_hist3" model="coop2.potrerohist">
+      <field name="fecha">2020-04-01</field>
+      <field name="potrero_id" ref="coop2.potr1"/>
+      <field name="area_pasto_cultivado">25</field>
+      <field name="area_pasto_natural">15</field>
+    </record>
+
   </data>
 
 </odoo>

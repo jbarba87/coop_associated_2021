@@ -36,6 +36,7 @@
         'views/view_historial.xml',
         'views/view_tablero.xml',
         'data/data.xml',
+        'data/data_esquila.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

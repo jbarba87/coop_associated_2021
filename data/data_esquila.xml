@@ -1,0 +1,28 @@
+<odoo>
+  <data>
+    <!-- camelido 1 -->
+    <record id="cam_hist1" model="coop2.esquila">
+      <field name="fecha">2020-04-01</field>
+      <field name="camelido_id" ref="coop2.cam1"/>
+      <field name="produccion">5.0</field>
+    </record>
+  
+    <record id="cam_hist2" model="coop2.esquila">
+      <field name="fecha">2020-05-01</field>
+      <field name="camelido_id" ref="coop2.cam1"/>
+      <field name="produccion">5.0</field>
+    </record>  
+  
+    <record id="cam_hist3" model="coop2.esquila">
+      <field name="fecha">2020-06-01</field>
+      <field name="camelido_id" ref="coop2.cam1"/>
+      <field name="produccion">5.0</field>
+    </record>  
+    
+    <record id="cam_hist4" model="coop2.esquila">
+      <field name="fecha">2020-07-01</field>
+      <field name="camelido_id" ref="coop2.cam1"/>
+      <field name="produccion">5.0</field>
+    </record>  
+  </data>
+</odoo>

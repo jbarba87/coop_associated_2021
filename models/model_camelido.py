@@ -55,6 +55,10 @@ class camelido_andino(models.Model):
   cod_bisabuelo = fields.Many2one('coop2.camelido', string="Código del bisabuelo", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]")
   cod_bisabuela = fields.Many2one('coop2.camelido', string="Código de la bisabuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
   
+  
+  peso = fields.Float(string="Peso (kg)")
+  
+  
   sexo = fields.Selection([
     ('macho', 'Macho'),
     ('hembra', 'Hembra'),
@@ -130,8 +134,12 @@ class camelido_andino(models.Model):
   
   # Campo potrero
   potrero_id = fields.Many2one('coop2.potrero', string="Potrero", track_visibility="always")
-  
+
   
   # obtencion del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
   socio_id = fields.Integer(string="id", compute="get_socio_id", store=True)
+  
+  # Esquilas
+  lista_esquilas = fields.One2many('coop2.esquila', 'camelido_id', string="Esquilas")
+  

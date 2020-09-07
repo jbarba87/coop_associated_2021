@@ -40,6 +40,7 @@
               <field name="color"/>
               <field name="categoria"/>
               <field name="cond_adquisicion"/>
+              <field name="peso"/>
               <field name="esquila" widget="radio"/>
               <field name="num_esquila" attrs="{'invisible':[('esquila', '==', 'no')]}"/>
             </group>
@@ -82,13 +83,21 @@
                 <field name="observaciones"/>
               </group>
             </page>
+            <page string="Esquilas">
+                <field name="lista_esquilas">
+                  <tree editable="bottom">
+                    <field name="fecha"/>
+                    <field name="estimacion"/>
+                    <field name="produccion"/>
+                  </tree>
+                </field>
+            </page>
           </notebook>
         </sheet>
         <div class="oe_chatter">
           <field name="message_follower_ids" widget="mail_followers"/>
           <field name="activity_ids" widget="mail_activity"/>
           <field name="message_ids" widget="mail_thread" option="{'post_refresh':'recipients'}"/>
-          
         </div>
       </form>
     </field>

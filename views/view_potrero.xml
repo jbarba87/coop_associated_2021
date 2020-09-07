@@ -85,6 +85,15 @@
                 </tree>
               </field>
             </page>
+            <page string="Historial">
+              <field name="potrero_historial">
+                <tree editable="bottom">
+                  <field name="fecha"/>
+                  <field name="area_pasto_cultivado"/>
+                  <field name="area_pasto_natural"/>
+                </tree>
+              </field>
+            </page>
           </notebook>
         </sheet>
       </form>

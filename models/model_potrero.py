@@ -109,6 +109,7 @@ class potrero(models.Model):
   parcela_id = fields.Many2one('coop2.parcela', string="Parcela", required=True)
   
   camelidos = fields.One2many('coop2.camelido', 'potrero_id', string="Camelidos")
+  potrero_historial = fields.One2many('coop2.potrerohist', 'potrero_id', string="Historial")
   
   # Datos del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")

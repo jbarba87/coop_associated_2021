@@ -8,3 +8,5 @@ from . import model_parcela
 from . import model_potrero
 from . import model_camelido
 from . import model_historial
+from . import model_esquila
+from . import model_potrero_historial
