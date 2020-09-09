@@ -11,13 +11,12 @@ class potrero(models.Model):
   _rec_name = "nombre_potrero"
 
 
-  # Funcion que cuenta la cantidad de potreros de la parcela
+  # Funcion que cuenta la cantidad de camelidos del potrero
   @api.one
   @api.depends('camelidos')
   def count_camelidos(self):
     if self.camelidos is not False:
       self.num_camelidos = self.env["coop2.camelido"].search_count([('potrero_id', '=', self.id)])
-
 
 
   # Funcion que autocompleta el campo Socio, para saber el socio dueño de la parcela
@@ -114,3 +113,56 @@ class potrero(models.Model):
   # Datos del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
   socio_id = fields.Integer(compute="get_socio_id", store=True)
+  
+  
+  ###### DATOS DE LOS CAMELIDOS #############
+
+  # Funcion que cuenta las alpacas hembra
+  @api.one
+  @api.depends('tui_hembra', 'alp_hembra_adulto')
+  def calc_hembra(self):
+    self.alp_hembra = self.tui_hembra + self.alp_hembra_adulto
+
+  # Funcion que cuenta las alpacas por genero
+  @api.one
+  @api.depends('alp_hembra_adulto', 'alp_macho_adulto', 'tui_macho', 'tui_hembra', 'menores')
+  def calc_alp_genero(self):
+    self.total_alpacas_gen = self.alp_hembra_adulto + self.alp_macho_adulto + self.tui_macho + self.tui_hembra + self.menores
+
+  @api.one
+  @api.depends('huacaya', 'suri')
+  def calc_alp_raza(self):
+    self.total_alpacas_raza = self.huacaya + self.suri
+    
+  # Alpacas por genero
+
+  alp_macho_adulto = fields.Integer(string="Alpacas macho adulto")
+  alp_hembra_adulto = fields.Integer(string="Alpacas hembra adulto")
+  
+  tui_macho = fields.Integer(string="Tui Macho")
+  tui_hembra = fields.Integer(string="Tui Hembra")
+
+  alp_hembra = fields.Integer(string="Alpacas hembra", compute="calc_hembra", store=True)
+
+  menores = fields.Integer(string="Menores")
+
+  total_alpacas_gen =fields.Integer(string="Total alpacas", compute="calc_alp_genero")
+
+  # Alpacas por raza
+  huacaya = fields.Integer(string="Alpacas Huacaya")
+  suri = fields.Integer(string="Alpacas Suri")
+  
+  total_alpacas_raza =fields.Integer(string="Total alpacas", compute="calc_alp_raza", store=True)
+ 
+  ###### SACA ANUAL #############
+  @api.one
+  @api.depends('saca')
+  def calc_saca(self):
+    if self.total_alpacas_raza != 0:
+      self.porc_saca = (self.saca/self.total_alpacas_raza)*100.0
+    else:
+      self.porc_saca = 0.0
+
+
+  saca = fields.Integer(string="Saca Anual")
+  porc_saca = fields.Float(string="% Saca", compute="calc_saca", store=True)

@@ -101,16 +101,44 @@
               </field>
             </group>
           </page>
-          <page string="Caracteristicas del domicilio" attrs="{'invisible':[('es_socio', '==', False)]}">
+          <page string="Familia y vivienda" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
-              <group>
+              <group string="Caractéristicas de domicilio">
                 <field name="dom_permanente"/>
                 <field name="dom_transitorio"/>
                 <field name="personas_nucleo"/>
-                <field name="num_hijos"/>
-                <field name="num_hijas"/>
+              </group>
+              <group string="Familia">
+                <field name="num_hijos_1"/>
+                <field name="num_hijos_2"/>
+                <field name="num_hijos_3"/>
+                <field name="num_hijos_4"/>
+                <field name="num_hijos_5"/>
+                <field name="num_hijos_total"/>
               </group>
             </group>
+          </page>
+          <page string="Datos requeridos">
+            <group>
+              <group string="Alpacas por edad/género">
+                <field name="suri_total"/>
+                <field name="huacaya_total"/>
+                <field name="macho_adulto_total"/>
+                <field name="hembra_adulto_total"/>
+                <field name="tui_macho_total"/>
+                <field name="tui_hembra_total"/>
+                <field name="menores_total"/>
+              </group>
+              <group string="Alpacas por raza">
+                <field name="suri_total"/>
+                <field name="huacaya_total"/>
+              </group>
+              <group string="Total de alpacas">
+                <field name="alpacas_total"/>
+              </group>
+
+            </group>
+            
           </page>
         </xpath>
       </field>

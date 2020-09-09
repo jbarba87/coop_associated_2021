@@ -73,6 +73,7 @@
             <page string="Observaciones">
               <field name="observaciones"/>
             </page>
+            <!--
             <page string="Camelidos">
               <field name="camelidos">
                 <tree editable="bottom">
@@ -84,6 +85,28 @@
                   <field name="edad"/>
                 </tree>
               </field>
+            </page>-->
+            <page string="Camelidos">
+              <group>
+                <group string="Clasificación por edad/género">
+                  <field name="alp_macho_adulto"/>
+                  <field name="alp_hembra_adulto"/>
+                  <field name="tui_macho"/>
+                  <field name="tui_hembra"/>
+                  <field name="alp_hembra"/>
+                  <field name="menores"/>
+                  <field name="total_alpacas_gen"/>
+                </group>
+                <group string="Clasificación por raza">
+                  <field name="huacaya"/>
+                  <field name="suri"/>
+                  <field name="total_alpacas_raza"/>
+                </group>
+              </group>
+              <group string="Porcentaje de saca">
+                <field name="saca"/>
+                <field name="porc_saca"/>
+              </group>
             </page>
             <page string="Historial">
               <field name="potrero_historial">

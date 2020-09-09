@@ -24,8 +24,8 @@
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
         'security/security.xml',
+        'security/ir.model.access.csv',
         #'views/views.xml',
         #'views/templates.xml',
         'views/view_socio.xml',
@@ -38,6 +38,12 @@
         'views/view_tablero.xml',
         'data/data.xml',
         'data/data_esquila.xml',
+#        'data/asoc.xml',
+#        'data/user_1.xml',
+#        'data/user_2.xml',
+#        'data/user_3.xml',
+#        'data/user_4.xml',
+#        'data/user_5.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

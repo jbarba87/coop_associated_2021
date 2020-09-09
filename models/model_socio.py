@@ -14,12 +14,11 @@ class socio(models.Model):
     ('DNI_unico', 'unique (dni)', 'Ya existe un socio con ese número de DNI.')
   ]
   
-  # Funcion que cuenta el nuemro de camelidos del socio
+  # Funcion que cuenta el numero de camelidos del socio
   @api.one
   @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
   def contar_camelidos(self):
     self.num_camelidos = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id)])
-    print("          Cantidad camelidos", self.num_camelidos)
 
   @api.one
   @api.depends('cabanas.socio_id')
@@ -84,9 +83,7 @@ class socio(models.Model):
       if not rec.dni.isnumeric():
         raise ValidationError('El campo DNI solo debe contener números.')
  
- 
- 
- 
+
   # Campos personales
   dni = fields.Char(string="DNI", size=8, required=True)
   fecha_nac = fields.Date(string="Fecha de nacimiento")
@@ -116,6 +113,9 @@ class socio(models.Model):
   ('divorciado', 'Divorciado'),
   ], default="soltero", string="Estado Civil")
   
+  # Campo relacional al historial del socio
+  historial = fields.One2many('coop2.historial', 'socio_id', string="Historial")
+  
   # Domicilio
   dom_permanente = fields.Char(size=30)
   dom_transitorio = fields.Char(size=30)
@@ -123,11 +123,129 @@ class socio(models.Model):
   num = [(x, str(x)) for x in range(1, 20)]
   personas_nucleo = fields.Selection(num, string="Personas nucleo familiar")
   
-  
+
+	## CAMPOS AGREGADOS DEBIDO AL DOCUMENTO #### 
+
+  @api.one
+  @api.depends('num_hijos_1', 'num_hijos_2', 'num_hijos_3', 'num_hijos_4', 'num_hijos_5')
+  def calc_hijos(self):
+    self.num_hijos_total = self.num_hijos_1 + self.num_hijos_2 + self.num_hijos_3 + self.num_hijos_4 + self.num_hijos_5
+
+
   num = [(x, str(x)) for x in range(1, 10)]
-  num_hijos = fields.Selection(num, string="Número de hijos")
-  num_hijas = fields.Selection(num, string="Número de hijas")
+  num_hijos_1 = fields.Selection(num, string="Hijos de 0 a 5 años")
+  num_hijos_2 = fields.Selection(num, string="Hijos de 6 a 10 años")
+  num_hijos_3 = fields.Selection(num, string="Hijos de 11 a 15 años")
+  num_hijos_4 = fields.Selection(num, string="Hijos de 16 a 20 años")
+  num_hijos_5 = fields.Selection(num, string="Hijos de 21 años a más")
   
-  # Campo relacional al historial del socio
-  historial = fields.One2many('coop2.historial', 'socio_id', string="Historial")
+  num_hijos_total = fields.Integer(string="Total hijos", compute="calc_hijos")
+  
+  
+  ###################################################
+  ##### CAMPOS PARA LAS ESTADISTICAS
+  ###################################################  
+  
+  # Obtencion de la data por cada potrero
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.suri')
+  def cont_suri(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.suri
+    self.suri_total = acc
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.huacaya')
+  def cont_huacaya(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.huacaya
+    self.huacaya_total = acc
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.alp_macho_adulto')
+  def cont_macho_adulto(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.alp_macho_adulto
+    self.macho_adulto_total = acc
+
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.alp_hembra_adulto')
+  def cont_hembra_adulto(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.alp_hembra_adulto
+    self.hembra_adulto_total = acc
+
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.tui_macho')
+  def cont_tui_macho(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.tui_macho
+    self.tui_macho_total = acc
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.tui_hembra')
+  def cont_tui_hembra(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.tui_hembra
+    self.tui_hembra_total = acc
+
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.alp_hembra')
+  def cont_hembra(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.alp_hembra
+    self.alp_hembra_total = acc
+
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.menores')
+  def cont_menores(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.menores
+    self.menores_total = acc
+
+
+  @api.one
+  @api.depends('cabanas.parcelas.potreros.total_alpacas_raza')
+  def cont_alpacas(self):
+    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
+    acc = 0
+    for rec in ptrs:
+      acc = acc + rec.total_alpacas_raza
+    self.alpacas_total = acc
+
+  suri_total = fields.Integer(string="Alpacas Suri", compute="cont_suri")
+  huacaya_total = fields.Integer(string="Alpacas Huacaya", compute="cont_huacaya")
+
+  macho_adulto_total = fields.Integer(string="Alpacas Macho adulto", compute="cont_macho_adulto")
+  hembra_adulto_total = fields.Integer(string="Alpacas Hembra adulto", compute="cont_hembra_adulto")
+  tui_macho_total = fields.Integer(string="Tui macho", compute="cont_tui_macho")
+  tui_hembra_total = fields.Integer(string="Tui hembra", compute="cont_tui_hembra")
+
+  alp_hembra_total = fields.Integer(string="Alpacas Hembra", compute="cont_hembra")
+  
+  menores_total = fields.Integer(string="Menores", compute="cont_menores")
+  
+  alpacas_total = fields.Integer(string="Total alpacas", compute="cont_alpacas")
+  
 
