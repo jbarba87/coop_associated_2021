@@ -7,12 +7,13 @@
     <field name="arch" type="xml">
       <tree>
         <field name="nombre_potrero"/>
-        <field name="nombre_socio"/>
+<!--        <field name="nombre_socio"/> -->
         <field name="area"/>
         <field name="material"/>
         <field name="area_pasto_natural"/>
         <field name="area_pasto_cultivado"/>
-        <field name="num_camelidos"/>
+        <field name="total_alpacas_raza"/>
+
       </tree>
     </field>
   </record>
@@ -119,6 +120,12 @@
             </page>
           </notebook>
         </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="activity_ids" widget="mail_activity"/>
+          <field name="message_ids" widget="mail_thread" option="{'post_refresh':'recipients'}"/>
+        </div>
+
       </form>
     </field>
   </record>

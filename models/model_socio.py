@@ -43,7 +43,7 @@ class socio(models.Model):
   
   
   # Campos computados para estadistica
-  num_camelidos = fields.Integer(string="Numero de camelidos", compute="contar_camelidos", store=True)
+#  num_camelidos = fields.Integer(string="Numero de camelidos", compute="contar_camelidos", store=True)
   num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas", store=True)
   num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas", store=True)
   num_potreros = fields.Integer(string="Numero de potreros", compute="contar_potreros", store=True)
@@ -68,10 +68,10 @@ class socio(models.Model):
   def contar_hembras(self):
     self.num_alpacas_hembra = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id), ('sexo', '=', 'hembra')])
 
-  num_alpacas_huacayo = fields.Integer(string="Alpacas Huacayo", compute="contar_huacayos", store=True)
-  num_alpacas_suri = fields.Integer(string="Alpacas Suri", compute="contar_suris", store=True)
-  num_alpacas_macho = fields.Integer(string="Alpacas Macho", compute="contar_machos", store=True)
-  num_alpacas_hembra = fields.Integer(string="Alpacas Hembra", compute="contar_hembras", store=True)
+#  num_alpacas_huacayo = fields.Integer(string="Alpacas Huacayo", compute="contar_huacayos", store=True)
+#  num_alpacas_suri = fields.Integer(string="Alpacas Suri", compute="contar_suris", store=True)
+#  num_alpacas_macho = fields.Integer(string="Alpacas Macho", compute="contar_machos", store=True)
+#  num_alpacas_hembra = fields.Integer(string="Alpacas Hembra", compute="contar_hembras", store=True)
  
  
   # Campos personales y sus funciones
@@ -234,18 +234,17 @@ class socio(models.Model):
       acc = acc + rec.total_alpacas_raza
     self.alpacas_total = acc
 
-  suri_total = fields.Integer(string="Alpacas Suri", compute="cont_suri")
-  huacaya_total = fields.Integer(string="Alpacas Huacaya", compute="cont_huacaya")
+  suri_total = fields.Integer(string="Alpacas Suri", compute="cont_suri", store=True)
+  huacaya_total = fields.Integer(string="Alpacas Huacaya", compute="cont_huacaya", store=True)
+  macho_adulto_total = fields.Integer(string="Alpacas Macho adulto", compute="cont_macho_adulto", store=True)
+  hembra_adulto_total = fields.Integer(string="Alpacas Hembra adulto", compute="cont_hembra_adulto", store=True)
+  tui_macho_total = fields.Integer(string="Tui macho", compute="cont_tui_macho", store=True)
+  tui_hembra_total = fields.Integer(string="Tui hembra", compute="cont_tui_hembra", store=True)
 
-  macho_adulto_total = fields.Integer(string="Alpacas Macho adulto", compute="cont_macho_adulto")
-  hembra_adulto_total = fields.Integer(string="Alpacas Hembra adulto", compute="cont_hembra_adulto")
-  tui_macho_total = fields.Integer(string="Tui macho", compute="cont_tui_macho")
-  tui_hembra_total = fields.Integer(string="Tui hembra", compute="cont_tui_hembra")
-
-  alp_hembra_total = fields.Integer(string="Alpacas Hembra", compute="cont_hembra")
+  alp_hembra_total = fields.Integer(string="Alpacas Hembra", compute="cont_hembra", store=True)
   
-  menores_total = fields.Integer(string="Menores", compute="cont_menores")
+  menores_total = fields.Integer(string="Menores", compute="cont_menores", store=True)
   
-  alpacas_total = fields.Integer(string="Total alpacas", compute="cont_alpacas")
+  alpacas_total = fields.Integer(string="Total alpacas", compute="cont_alpacas", store=True)
   
 

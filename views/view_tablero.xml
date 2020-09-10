@@ -17,7 +17,7 @@
       <form string="Dashboard">
         <board style="2-1">
           <column>
-            <action string="Grafico" name="%(coop2.act_socio_camelido)d" domain="[('es_socio', '=', True)]"/>
+            <action string="Socios con más de 400 alpacas" name="%(coop2.act_socio_camelido)d" domain="[('es_socio', '=', True), ('alpacas_total', '>', 400)]"/>
           </column>
           <column>
           </column>

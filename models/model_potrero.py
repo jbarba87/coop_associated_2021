@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 class potrero(models.Model):
   _name = "coop2.potrero"
   _description = "Potrero"
+  _inherit = ['mail.thread', 'mail.activity.mixin'] # for Chatter
   _rec_name = "nombre_potrero"
 
 
@@ -94,7 +95,7 @@ class potrero(models.Model):
   epoca_lluvia = fields.Float("Epoca de lluvia L/s")
   epoca_estiage = fields.Float("Epoca de estiage L/s")
   
-  observaciones = fields.Text("Observaciones")  
+  observaciones = fields.Text("Observaciones")
   
   
   # Campo computado
@@ -136,21 +137,21 @@ class potrero(models.Model):
     
   # Alpacas por genero
 
-  alp_macho_adulto = fields.Integer(string="Alpacas macho adulto")
-  alp_hembra_adulto = fields.Integer(string="Alpacas hembra adulto")
+  alp_macho_adulto = fields.Integer(string="Alpacas macho adulto", track_visibility="always")
+  alp_hembra_adulto = fields.Integer(string="Alpacas hembra adulto", track_visibility="always")
   
-  tui_macho = fields.Integer(string="Tui Macho")
-  tui_hembra = fields.Integer(string="Tui Hembra")
+  tui_macho = fields.Integer(string="Tui Macho", track_visibility="always")
+  tui_hembra = fields.Integer(string="Tui Hembra", track_visibility="always")
 
   alp_hembra = fields.Integer(string="Alpacas hembra", compute="calc_hembra", store=True)
 
-  menores = fields.Integer(string="Menores")
+  menores = fields.Integer(string="Menores", track_visibility="always")
 
   total_alpacas_gen =fields.Integer(string="Total alpacas", compute="calc_alp_genero")
 
   # Alpacas por raza
-  huacaya = fields.Integer(string="Alpacas Huacaya")
-  suri = fields.Integer(string="Alpacas Suri")
+  huacaya = fields.Integer(string="Alpacas Huacaya", track_visibility="always")
+  suri = fields.Integer(string="Alpacas Suri", track_visibility="always")
   
   total_alpacas_raza =fields.Integer(string="Total alpacas", compute="calc_alp_raza", store=True)
  
