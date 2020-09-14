@@ -5,6 +5,12 @@ from odoo.exceptions import ValidationError
 import json
 from datetime import datetime, timedelta
 import os
+
+from matplotlib import pyplot as plt
+import numpy as np
+import base64
+from io import BytesIO
+
 class socio(models.Model):
 
   _inherit = "res.partner"
@@ -18,7 +24,7 @@ class socio(models.Model):
   @api.one
   @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
   def contar_camelidos(self):
-    self.num_camelidos = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id)])
+    self.num_fichas_camelidos = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id)])
 
   @api.one
   @api.depends('cabanas.socio_id')
@@ -43,7 +49,7 @@ class socio(models.Model):
   
   
   # Campos computados para estadistica
-#  num_camelidos = fields.Integer(string="Numero de camelidos", compute="contar_camelidos", store=True)
+  num_fichas_camelidos = fields.Integer(string="Fichas de camelidos", compute="contar_camelidos")
   num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas", store=True)
   num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas", store=True)
   num_potreros = fields.Integer(string="Numero de potreros", compute="contar_potreros", store=True)
@@ -246,5 +252,44 @@ class socio(models.Model):
   menores_total = fields.Integer(string="Menores", compute="cont_menores", store=True)
   
   alpacas_total = fields.Integer(string="Total alpacas", compute="cont_alpacas", store=True)
+
+
+
+
+  @api.one
+  @api.depends('macho_adulto_total', 'hembra_adulto_total', 'tui_macho_total', 'tui_hembra_total', 'menores_total')
+  def grafica_camelidos(self):
+    print("       Generating graphs")
+    fig = plt.figure()
+    buf = BytesIO()
+    tags = ['Macho adulto', 'hembra adulta', 'tui macho', 'tui hembra', 'menores']
+    values = [self.macho_adulto_total, self.hembra_adulto_total, self.tui_macho_total, self.tui_hembra_total, self.menores_total]
+    ax = fig.add_axes([0,0,1,1])
+    ax.axis('equal')
+    ax.pie(values, labels=tags, autopct='%1.2f%%')
+    
+    fig.savefig(buf, format="png")
+    self.camel_graph_percentage = base64.encodestring(buf.getbuffer())
+
+  # image
+  camel_graph_percentage = fields.Binary(compute="grafica_camelidos")
   
+  
+  def socio_registrar_muestra_camelido(self):
+    t = datetime.today()
+    print("    EScribiendo datos")
+    values = {
+      'fecha_muestreo': t.strftime("%Y-%m-%d"),
+      'socio_id': self.id,
+      'cant_suri': self.suri_total,
+      'cant_huacaya': self.huacaya_total,
+      'cant_macho_adulto': self.macho_adulto_total,
+      'cant_hembra_adulto': self.hembra_adulto_total,
+      'cant_tui_macho': self.tui_macho_total,
+      'cant_tui_hembra': self.tui_hembra_total,
+      'cant_menores': self.menores_total,
+      'total_camelidos': self.alpacas_total,
+    }
+    self.env['coop2.historial'].create(values)
+    
 

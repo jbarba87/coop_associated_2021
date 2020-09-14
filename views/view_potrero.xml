@@ -142,6 +142,8 @@
     </field>
   </record>
 
+   
+
 
   <record id="action_potrero" model="ir.actions.act_window">
     <field name="name">Potrero</field>

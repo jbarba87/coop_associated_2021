@@ -9,6 +9,19 @@ class historial(models.Model):
   
   fecha_muestreo = fields.Date()
   socio_id = fields.Many2one('res.partner', string="Socio Propietario", required = True)
-  num_camelidos = fields.Integer(string="Total camélidos")
-  num_camelidos_macho = fields.Integer(string="Camélidos machos")
-  num_camelidos_hembra = fields.Integer(string="Camélidos hembras")
+  
+  cant_suri = fields.Integer(string="Suri")
+  cant_huacaya = fields.Integer(string="Huacaya")
+
+  cant_macho_adulto = fields.Integer(string="Machos adultos")
+  cant_hembra_adulto = fields.Integer(string="Hembras adultas")
+
+  cant_hembra = fields.Integer(string="Hembras total")
+
+  cant_tui_macho = fields.Integer(string="Tuis machos")
+  cant_tui_hembra = fields.Integer(string="Tuis hembras")
+  
+  cant_menores = fields.Integer(string="Menores")
+  
+  total_camelidos = fields.Integer(string="Total camélidos")
+

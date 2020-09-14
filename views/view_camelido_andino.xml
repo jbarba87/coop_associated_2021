@@ -57,29 +57,44 @@
               </group>
             </page>
             <page string="Características del Vellón">
-              <group>
-                <group string="Propiedades Físicas">
-                  <field name="diametro"/>
-                  <field name="longitud_mecha"/>
-                  <field name="rizo_ondulacion"/>
-                  <field name="resistencia_tenacidad"/>
-                  <field name="lustre_brillo"/>
-                  <field name="categoria_vellon"/>
-                  <field name="clasificacion_vellon"/>
+              <group string="Propiedades Físicas">
+
+                 <!--
+                  <table>
+                    <tr>Extrafina &#60; 18u</tr>
+                    <tr>Fina &#62;&#61; 18 &#60;&#61; 22u</tr>
+                    <tr>Media &#62;&#61; 22 &#60; 28u</tr>
+                  </table>
+                  -->
+                <group>
+                  <field name="categoria_vellon_value"/>
+                  <field name="longitud_mecha_value"/>
+                  <field name="densidad_value"/>
+                  <field name="rizo_value"/>
+                  <field name="uniformidad_value"/>
+                  <field name="general_value"/>
                 </group>
-               </group>
+                <group>
+                  <field name="categoria_vellon" nolabel="1"/><br/>
+                  <field name="longitud_mecha" nolabel="1"/><br/>
+                  <field name="densidad" nolabel="1"/><br/>
+                  <field name="rizo_ondulacion" nolabel="1"/><br/>
+                  <field name="uniformidad" nolabel="1"/><br/>
+                </group>
+              </group>
             </page>
             <page string="Conformación">
               <group>
-                <field name="cabeza"/>
-                <field name="talla"/>
-                <field name="calze"/>
-                <field name="ap_general"/>
-                <field name="defectos"/>
+                <field name="cabeza_value"/>
+                <field name="talla_value"/>
+                <field name="calze_value"/>
+                <field name="ap_general_value"/>
+
               </group>
             </page>
             <page string="Observaciones">
               <group>
+                <field name="defectos"/>
                 <field name="observaciones"/>
               </group>
             </page>
@@ -122,4 +137,5 @@
 
   </data>
 </odoo>
+
 

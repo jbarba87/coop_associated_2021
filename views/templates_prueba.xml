@@ -1,0 +1,11 @@
+<odoo>
+  <template id="prueba" name="prueba">
+    
+    <t t-foreach="[1, 2, 3, 4]" t-as="i">
+      <p> Hola <t t-esc="i" /></p>
+    
+    </t>
+  
+  </template>
+
+</odoo>

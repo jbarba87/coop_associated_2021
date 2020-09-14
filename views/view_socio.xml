@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-  
+
     <!-- view para el boton-->
     <record model="ir.actions.act_window" id="open_prueba">
       <field name="name">Grafica</field>
@@ -10,7 +10,19 @@
       <field name="domain">[('socio_id', '=', active_id)]</field>
       <field name="context">{}</field>
     </record>
-  
+    
+    <!--
+    <record id="act_socio_camelido" model="ir.actions.act_window">
+    <field name="name">Socio camelido</field>
+    <field name="res_model">res.partner</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="coop2.socio_camelido_graph"/>
+  </record>
+
+
+
+
+  -->
     <record id="view_socio_form" model="ir.ui.view">
       <field name="name">res.partner.inherit</field>
       <field name="model">res.partner</field>
@@ -50,18 +62,18 @@
           <field name="departamento_nac"/>
           <field name="provincia_nac"/>
           <field name="distrito_nac"/>
+          <field name="write_date"/>
         </xpath>
 
         <xpath expr="//page[3]" position="after">
           <page string="Cabañas del socio" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
               <group>
-<!--                <field name="num_camelidos"/>-->
+<!--                <field name="num_fichas_camelidos"/>-->
                 <field name="num_cabanas"/>
                 <field name="num_parcelas"/>
                 <field name="num_potreros"/>
               </group>
-              <group>
                 <field name="cabanas">
                   <tree editable="bottom">
                     <field name="nombre"/>
@@ -72,12 +84,64 @@
                     <field name="socio_id" invisible="1"/> 
                   </tree>
                 </field>
-              </group>
+                
+
             </group>
           </page>
-          <!--
-          <page string="Características de los camélidos" attrs="{'invisible':[('es_socio', '==', False)]}">
+
+          <page string="Resumen camélidos">
+            <group col="3">
+              <group>
+              <h2> Alpacas por Raza </h2>
+              
+                <field name="suri_total"/>
+                <field name="huacaya_total"/>
+
+              <h2> Alpacas por edad/género </h2>
+                <field name="macho_adulto_total"/>
+                <field name="hembra_adulto_total"/>
+                <field name="tui_macho_total"/>
+                <field name="tui_hembra_total"/>
+                <field name="menores_total"/>
+</group>
+              <group colspan="2">
+                <field name="camel_graph_percentage" widget="image" nolabel="1" class="oe_product_img"/>
+              </group>
+            </group>
+
+
+              <group>
+                <group>
+                  <h2> Total Alpacas </h2>
+                </group>
+                <group>
+                  <h1><field name="alpacas_total"  nolabel="1"/></h1>
+                </group>
+              </group>
+
+            <field name="historial">
+              <tree editable="bottom"> 
+                <field name="fecha_muestreo"/>
+                <field name="cant_suri"/>
+                <field name="cant_huacaya"/>
+                <field name="cant_macho_adulto"/>
+                <field name="cant_hembra_adulto"/>
+                <field name="cant_tui_macho"/>
+                <field name="cant_tui_hembra"/>
+                <field name="cant_menores"/>
+                <field name="total_camelidos"/>
+              </tree>
+            </field>
             <group>
+            <field name="num_fichas_camelidos"/>
+            </group>
+            <button name="%(open_prueba)d" string="Mostrar historial" type="action" class="oe_highlight"/>
+            <button name="socio_registrar_muestra_camelido" string="Tomar registro" type="object" class="oe_highlight"/>
+          </page>
+
+<!-- 
+          <page string="Historial" attrs="{'invisible':[('es_socio', '==', False)]}">
+
               <group>
                 <field name="num_camelidos"/>
               </group>
@@ -89,20 +153,10 @@
                 <field name="num_alpacas_macho"/>
                 <field name="num_alpacas_hembra"/>
               </group>
-              
-              <button name="%(open_prueba)d" string="Mostrar historial" type="action" class="oe_highlight"/>
-
-              <field name="historial">
-                <tree editable="bottom"> 
-                  <field name="fecha_muestreo"/>
-                  <field name="num_camelidos_macho"/>
-                  <field name="num_camelidos_hembra"/>
-                  <field name="num_camelidos"/>
-                </tree>
-              </field>
-            </group>
+           
           </page>
-          -->
+
+-->
           <page string="Familia y vivienda" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
               <group string="Caractéristicas de domicilio">
@@ -120,28 +174,6 @@
               </group>
             </group>
           </page>
-          <page string="Datos requeridos">
-            <group>
-              <group string="Alpacas por edad/género">
-                <field name="suri_total"/>
-                <field name="huacaya_total"/>
-                <field name="macho_adulto_total"/>
-                <field name="hembra_adulto_total"/>
-                <field name="tui_macho_total"/>
-                <field name="tui_hembra_total"/>
-                <field name="menores_total"/>
-              </group>
-              <group string="Alpacas por raza">
-                <field name="suri_total"/>
-                <field name="huacaya_total"/>
-              </group>
-              <group string="Total de alpacas">
-                <field name="alpacas_total"/>
-              </group>
-
-            </group>
-            
-          </page>
         </xpath>
       </field>
     </record>
@@ -158,6 +190,21 @@
         </graph>
       </field>
     </record>
+
+
+  <!-- pivor view -->
+  <record id="socio_camelido_pivot" model="ir.ui.view">
+    <field name="name">coop2.socio_camelido_pivot</field>
+    <field name="model">res.partner</field>
+    <field name="arch" type="xml">
+      <pivot string="Camélidos">
+        <field name="name" type="row"/>
+        <field name="alpacas_total" type="measure"/>
+        <field name="suri_total" type="measure"/>
+        <field name="huacaya_total" type="measure"/>
+      </pivot>
+    </field>
+  </record>
 
     <!-- graph views -->
     <!--
@@ -198,10 +245,23 @@
         </xpath>
       </field>
     </record>
-    
     -->
-    
-    
+
+<!--
+    <record id="view_res_partner_inherit_search" model="ir.ui.view">
+      <field name="name">res.partner.search.expand.filter</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_res_partner_filter"/>
+      <field name="arch" type="xml">
+        <xpath expr="//search" position="inside">
+          <filter string="Provincia" name="filter_socio" domain="[('es_socio', '=', True)]"/>
+        </xpath>
+      </field>
+    </record>
+
+
+ -->
+
     <record id="action_socio" model="ir.actions.act_window">
       <field name="name">Socios</field>
       <field name="type">ir.actions.act_window</field>
@@ -210,7 +270,7 @@
       <field name="context">{}</field>
       <field name="domain">[('es_socio', '=', True)]</field>
       <field name="view_type">form</field>
-      <field name="view_mode">kanban,tree,form,graph</field>
+      <field name="view_mode">kanban,tree,form,graph,pivot</field>
       <field name="help" type="html">
         <p class="o_view_nocontent_smiling_face">
           Agrege un socio.        

@@ -9,7 +9,7 @@
       <field name="arch" type="xml">
         <graph string="Gráfica">
           <field name="fecha_muestreo"/>
-          <field name="num_camelidos" type="measure"/>
+          <field name="total_camelidos" type="measure"/>
         </graph>
       </field>
     </record>

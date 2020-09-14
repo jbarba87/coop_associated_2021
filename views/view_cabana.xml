@@ -1,6 +1,6 @@
 <odoo>
   <data>
-  
+
   <record model="ir.ui.view" id="cabana_tree">
     <field name="name">Cabaña</field>
     <field name="model">coop2.cabana</field>
@@ -23,6 +23,7 @@
     <field name="model">coop2.cabana</field>
     <field name="arch" type="xml">
       <form>
+
         <sheet>
           <group>
             <group>

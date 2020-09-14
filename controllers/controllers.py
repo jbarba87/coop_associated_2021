@@ -19,3 +19,8 @@ from odoo import http
 #             'object': obj
 #         })
 
+class Coop2(http.Controller):
+  @http.route('/saludo', auth='public')
+  def index(self, **kw):
+    #return "Hello, world"
+    return http.request.render('coop2.prueba')

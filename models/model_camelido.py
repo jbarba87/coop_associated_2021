@@ -35,7 +35,7 @@ class camelido_andino(models.Model):
 
   fecha_empadre = fields.Date(string="Fecha de empadre")
   fecha_nac = fields.Date(string="Fecha de naciomiento")
-  edad = fields.Integer(string="Edad", compute="calcula_edad", store=True)
+  edad = fields.Integer(string="Edad", compute="calcula_edad")
   
   # Tipo de identificacion
   tipo_identificacion = fields.Selection([
@@ -56,26 +56,22 @@ class camelido_andino(models.Model):
   cod_bisabuela = fields.Many2one('coop2.camelido', string="Código de la bisabuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
   
   
-  peso = fields.Float(string="Peso (kg)")
+  peso = fields.Float(string="Peso (kg)", track_visibility="always")
   
   
   sexo = fields.Selection([
     ('macho', 'Macho'),
     ('hembra', 'Hembra'),
-  ], default="macho", string="Género")
+  ], default="hembra", string="Género")
   
   raza = fields.Selection([
-    ('huacayo', 'Huacayo'),
+    ('huacaya', 'Huacaya'),
     ('suri', 'Suri'),
-    ('raza 3', 'Raza 3'),
-    ('raza 4', 'Raza 4'),
-  ], string="Raza")
+  ], default="huacaya", string="Raza")
   
   color = fields.Selection([
     ('blanco', 'blanco'),
-    ('color 2', 'Color 2'),
-    ('color 3', 'Color 3'),
-    ('color 4', 'Color 4'),
+    ('color', 'color'),
   ], string="Color")
 
   categoria = fields.Selection([
@@ -98,19 +94,105 @@ class camelido_andino(models.Model):
 
 # Caracteristicas del Vellon
   # Propiedades fisicas
+  
+  #### Campos segun la ficha tecnica
+  
+  
+  @api.one
+  @api.depends('categoria_vellon_value')
+  def select_categoria_vellon(self):
+    if self.categoria_vellon_value is not False:
+      if self.categoria_vellon_value > 50:
+        self.categoria_vellon = 'extrafina'
+      if self.categoria_vellon_value < 51 and self.categoria_vellon_value > 10:
+        self.categoria_vellon = 'fina'
+      if self.categoria_vellon_value < 11:
+        self.categoria_vellon = 'media'
+
+  
+  categoria_vellon = fields.Selection([
+    ('extrafina', 'Extrafina < 18 u'),
+    ('fina', 'Fina >= 18 <= 0 22  u'),
+    ('media', 'Media >= 22 < 28 u'),
+  ], string="Categoria", compute="select_categoria_vellon")
+  categoria_vellon_value = fields.Selection([(x, str(x)) for x in range(0, 61)], string="Finura")
+  
+  
+  @api.one
+  @api.depends('longitud_mecha_value')
+  def select_longitud_mecha(self):
+    if self.longitud_mecha_value is not False:
+      if self.categoria_vellon_value > 3:
+        self.longitud_mecha = 'crec_mayor'
+      if self.longitud_mecha_value < 4:
+        self.longitud_mecha = 'crec_menor'
+ 
+  longitud_mecha = fields.Selection([
+    ('crec_mayor', 'Crecimiento anual > 7.5cm'),
+    ('crec_menor', 'Crecimiento anual < 7.5cm'),
+  ], string="Longitud de fibra", compute="select_longitud_mecha")
+  longitud_mecha_value = fields.Selection([(x, str(x)) for x in range(0, 9)], string="Longitud")
+  
+
+  @api.one
+  @api.depends('densidad_value')
+  def select_densidad(self):
+    if self.densidad_value is not False:
+      if self.densidad_value > 2:
+        self.densidad = 'alta'
+      if self.densidad_value < 3:
+        self.densidad = 'baja'
+
+  densidad = fields.Selection([
+    ('alta', 'Alta: Vellón compacto'),
+    ('baja', 'Baja: Vellón flojo'),
+  ], string="Densidad", compute="select_densidad")
+  densidad_value = fields.Selection([(x, str(x)) for x in range(0, 6)], string="Densidad")
+
+
+  @api.one
+  @api.depends('rizo_value')
+  def select_rizo(self):
+    if self.rizo_value is not False:
+      if self.rizo_value > 3:
+        self.rizo_ondulacion = 'con riso'
+      if self.rizo_value < 4:
+        self.rizo_ondulacion = 'sin riso'
+
+  rizo_ondulacion = fields.Selection([
+    ('con riso', 'Con riso'),
+    ('sin riso', 'Sin riso'),
+  ], string="Rizo u ondulación", compute="select_rizo")
+  rizo_value = fields.Selection([(x, str(x)) for x in range(0, 9)], string="Rizo")
+
+  @api.one
+  @api.depends('uniformidad_value')
+  def select_uniformidad(self):
+    if self.uniformidad_value is not False:
+      if self.uniformidad_value > 3:
+        self.uniformidad = 'homogeneo'
+      if self.uniformidad_value < 4:
+        self.uniformidad = 'no homogeneo'
+
+  uniformidad = fields.Selection([
+    ('homogeneo', 'Homogéneo'),
+    ('no homogeneo', 'Falta homogeneidad'),
+  ], string="Uniformidad", compute="select_uniformidad")
+  uniformidad_value = fields.Selection([(x, str(x)) for x in range(0, 5)], string="Uniformidad")
+
+
+  @api.one
+  @api.depends('categoria_vellon_value', 'longitud_mecha_value', 'densidad_value', 'rizo_value' ,'uniformidad_value')
+  def calc_total(self):
+    self.general_value = self.categoria_vellon_value + self.longitud_mecha_value + self.densidad_value + self.rizo_value + self.uniformidad_value
+
+  general_value = fields.Integer(string="Puntuación", compute="calc_total")
+
+  #### Campos que no se donde poner
   diametro = fields.Float(string="Diámetro")
-  longitud_mecha = fields.Float(string="Longitud de mecha")
-  rizo_ondulacion = fields.Float(string="Rizo u ondulación")
   resistencia_tenacidad = fields.Float(string="Resistencia o tenacidad")
   lustre_brillo = fields.Float(string="Lustre o brillo")
   grasa = fields.Float(string="Grasa")
-  
-  categoria_vellon = fields.Selection([
-    ('extrafina', 'Extrafina'),
-    ('fina', 'Fina'),
-    ('semifina', 'Semifina'),
-    ('gruesa', 'Gruesa'),
-  ], default="extrafina", string="Categoria")
   
   clasificacion_vellon = fields.Selection([
     ('baby', 'Alpaca Baby (<23um)'),
@@ -123,9 +205,17 @@ class camelido_andino(models.Model):
   
   # Conformacion
   cabeza = fields.Char(string="Cabeza")
+  cabeza_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')], default="0")
+  
   talla = fields.Char(string="Talla")
+  talla_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')], default="0")
+  
   calze = fields.Char(string="Calce")
+  calze_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
+  
   ap_general = fields.Char(string="Apariencia General")
+  ap_general_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
+
   defectos = fields.Char(string="Defectos")
   
   #observaciones
