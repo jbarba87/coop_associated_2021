@@ -27,6 +27,8 @@
             <group>
               <field name="identificacion"/>
               <field name="tipo_identificacion"/>
+              <field name="activo"  widget="radio"/>
+              <field name="baja_motivo" attrs="{'invisible':[('activo', '=', 'si')]}"/>
               <field name="fecha_empadre"/>
               <field name="fecha_nac"/>
               <field name="edad"/>
@@ -56,7 +58,7 @@
                 <field name="cod_bisabuela"/>
               </group>
             </page>
-            <page string="Características del Vellón">
+            <page string="Características">
               <group string="Propiedades Físicas">
 
                  <!--
@@ -72,7 +74,7 @@
                   <field name="densidad_value"/>
                   <field name="rizo_value"/>
                   <field name="uniformidad_value"/>
-                  <field name="general_value"/>
+
                 </group>
                 <group>
                   <field name="categoria_vellon" nolabel="1"/><br/>
@@ -82,17 +84,29 @@
                   <field name="uniformidad" nolabel="1"/><br/>
                 </group>
               </group>
-            </page>
-            <page string="Conformación">
-              <group>
-                <field name="cabeza_value"/>
-                <field name="talla_value"/>
-                <field name="calze_value"/>
-                <field name="ap_general_value"/>
-
+              
+              <group string="Conformación" col="6">
+                <group colspan="5">
+                  <field name="cabeza_descripcion" placeholder="Ingrese descripción"/>
+                  <field name="talla_descripcion" placeholder="Ingrese descripción"/>
+                  <field name="calze_descripcion" placeholder="Ingrese descripción"/>
+                  <field name="ap_general_descripcion" placeholder="Ingrese descripción"/>
+                </group>
+                <group colspan="1">
+                  <field name="cabeza_value" nolabel="1"/><br/>
+                  <field name="talla_value" nolabel="1"/><br/>
+                  <field name="calze_value" nolabel="1"/><br/>
+                  <field name="ap_general_value" nolabel="1"/><br/>
+                </group>
+              
               </group>
+              <group string="Puntuación">
+                <field name="general_value"/>
+              </group>
+              
             </page>
-            <page string="Observaciones">
+
+            <page string="Otras observaciones">
               <group>
                 <field name="defectos"/>
                 <field name="observaciones"/>

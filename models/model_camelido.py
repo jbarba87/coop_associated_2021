@@ -70,9 +70,9 @@ class camelido_andino(models.Model):
   ], default="huacaya", string="Raza")
   
   color = fields.Selection([
-    ('blanco', 'blanco'),
-    ('color', 'color'),
-  ], string="Color")
+    ('blanco', 'Blanco'),
+    ('color', 'Color'),
+  ], default="blanco", string="Color")
 
   categoria = fields.Selection([
     ('categoria 1', 'Categoria 1'),
@@ -181,12 +181,7 @@ class camelido_andino(models.Model):
   uniformidad_value = fields.Selection([(x, str(x)) for x in range(0, 5)], string="Uniformidad")
 
 
-  @api.one
-  @api.depends('categoria_vellon_value', 'longitud_mecha_value', 'densidad_value', 'rizo_value' ,'uniformidad_value')
-  def calc_total(self):
-    self.general_value = self.categoria_vellon_value + self.longitud_mecha_value + self.densidad_value + self.rizo_value + self.uniformidad_value
 
-  general_value = fields.Integer(string="Puntuación", compute="calc_total")
 
   #### Campos que no se donde poner
   diametro = fields.Float(string="Diámetro")
@@ -204,20 +199,30 @@ class camelido_andino(models.Model):
   ], default="baby", string="Clasificación del Vellón")
   
   # Conformacion
-  cabeza = fields.Char(string="Cabeza")
+  cabeza_descripcion = fields.Char(string="Cabeza")
   cabeza_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')], default="0")
   
-  talla = fields.Char(string="Talla")
+  talla_descripcion  = fields.Char(string="Talla")
   talla_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')], default="0")
   
-  calze = fields.Char(string="Calce")
+  calze_descripcion  = fields.Char(string="Calce")
   calze_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
   
-  ap_general = fields.Char(string="Apariencia General")
+  ap_general_descripcion  = fields.Char(string="Apariencia General")
   ap_general_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
 
   defectos = fields.Char(string="Defectos")
-  
+
+
+  @api.one
+  @api.depends('categoria_vellon_value', 'longitud_mecha_value', 'densidad_value', 'rizo_value' ,'uniformidad_value', 'cabeza_value', 'talla_value', 'calze_value', 'ap_general_value')
+  def calc_total(self):
+    self.general_value = self.categoria_vellon_value + self.longitud_mecha_value + self.densidad_value + self.rizo_value + self.uniformidad_value + self.cabeza_value + self.talla_value + self.calze_value + self.ap_general_value
+
+  general_value = fields.Integer(string="Puntuación", compute="calc_total")
+
+
+
   #observaciones
   observaciones = fields.Text(string="Observaciones")
   
@@ -232,4 +237,23 @@ class camelido_andino(models.Model):
   
   # Esquilas
   lista_esquilas = fields.One2many('coop2.esquila', 'camelido_id', string="Esquilas")
+  
+  
+  # Baja del animal
+  activo = fields.Selection([
+    ('si', 'Sí'),
+    ('no', 'No'),
+  ], default="si", string="Activo")
+  
+  baja_motivo = fields.Selection([
+    ('muerte', 'Muerte'),
+    ('transferencia', 'Transferencia'),
+  ], string="Motivo")
+  
+  
+  # Apareamiento
+#  apareamiento = fields.One2many('coop2.apareamiento', 'camelido_id', string="Apareamiento")
+  
+  
+  
   
