@@ -132,11 +132,23 @@
                 <field name="total_camelidos"/>
               </tree>
             </field>
+            <button name="socio_registrar_muestra_camelido" string="Tomar registro" type="object" class="oe_highlight"/>
+
+            <div style="height:50px" ></div>
+
             <group>
-            <field name="num_fichas_camelidos"/>
+              <field name="num_fichas_camelidos"/>
+              <field name="camelidos" context="{'default_socio_id': active_id, 'default_identificacion': dni + '-'}" >
+                <tree >
+                  <field name="identificacion"  />
+                  <field name="potrero_id"/>
+                  <field name="raza"/>
+                  <field name="color"/>
+                </tree>
+              </field>
             </group>
             <button name="%(open_prueba)d" string="Mostrar historial" type="action" class="oe_highlight"/>
-            <button name="socio_registrar_muestra_camelido" string="Tomar registro" type="object" class="oe_highlight"/>
+
           </page>
 
 <!-- 

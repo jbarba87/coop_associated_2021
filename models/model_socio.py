@@ -154,104 +154,26 @@ class socio(models.Model):
   
   # Obtencion de la data por cada potrero
 
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.suri')
-  def cont_suri(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.suri
-    self.suri_total = acc
 
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.huacaya')
-  def cont_huacaya(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.huacaya
-    self.huacaya_total = acc
+  suri_total = fields.Integer(string="Alpacas Suri")
+  huacaya_total = fields.Integer(string="Alpacas Huacaya")
+  macho_adulto_total = fields.Integer(string="Alpacas Macho adulto")
+  hembra_adulto_total = fields.Integer(string="Alpacas Hembra adulto")
+  tui_macho_total = fields.Integer(string="Tui macho")
+  tui_hembra_total = fields.Integer(string="Tui hembra")
 
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.alp_macho_adulto')
-  def cont_macho_adulto(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.alp_macho_adulto
-    self.macho_adulto_total = acc
-
-
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.alp_hembra_adulto')
-  def cont_hembra_adulto(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.alp_hembra_adulto
-    self.hembra_adulto_total = acc
-
-
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.tui_macho')
-  def cont_tui_macho(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.tui_macho
-    self.tui_macho_total = acc
-
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.tui_hembra')
-  def cont_tui_hembra(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.tui_hembra
-    self.tui_hembra_total = acc
-
-
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.alp_hembra')
-  def cont_hembra(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.alp_hembra
-    self.alp_hembra_total = acc
-
-
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.menores')
-  def cont_menores(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.menores
-    self.menores_total = acc
-
-
-  @api.one
-  @api.depends('cabanas.parcelas.potreros.total_alpacas_raza')
-  def cont_alpacas(self):
-    ptrs = self.env["coop2.potrero"].search([('socio_id', '=', self.id)])
-    acc = 0
-    for rec in ptrs:
-      acc = acc + rec.total_alpacas_raza
-    self.alpacas_total = acc
-
-  suri_total = fields.Integer(string="Alpacas Suri", compute="cont_suri", store=True)
-  huacaya_total = fields.Integer(string="Alpacas Huacaya", compute="cont_huacaya", store=True)
-  macho_adulto_total = fields.Integer(string="Alpacas Macho adulto", compute="cont_macho_adulto", store=True)
-  hembra_adulto_total = fields.Integer(string="Alpacas Hembra adulto", compute="cont_hembra_adulto", store=True)
-  tui_macho_total = fields.Integer(string="Tui macho", compute="cont_tui_macho", store=True)
-  tui_hembra_total = fields.Integer(string="Tui hembra", compute="cont_tui_hembra", store=True)
-
-  alp_hembra_total = fields.Integer(string="Alpacas Hembra", compute="cont_hembra", store=True)
+  alp_hembra_total = fields.Integer(string="Alpacas Hembra")
   
-  menores_total = fields.Integer(string="Menores", compute="cont_menores", store=True)
+  menores_total = fields.Integer(string="Menores")
   
-  alpacas_total = fields.Integer(string="Total alpacas", compute="cont_alpacas", store=True)
+  
+  @api.one
+  @api.depends('macho_adulto_total', 'hembra_adulto_total', 'tui_macho_total', 'tui_hembra_total', 'menores_total')
+  def calc_alpacas(self):
+    self.alpacas_total = self.macho_adulto_total + self.hembra_adulto_total + self.tui_macho_total + self.tui_hembra_total + self.menores_total
+
+  
+  alpacas_total = fields.Integer(string="Total alpacas", compute="calc_alpacas", store=True)
 
 
 
@@ -264,6 +186,8 @@ class socio(models.Model):
     buf = BytesIO()
     tags = ['Macho adulto', 'hembra adulta', 'tui macho', 'tui hembra', 'menores']
     values = [self.macho_adulto_total, self.hembra_adulto_total, self.tui_macho_total, self.tui_hembra_total, self.menores_total]
+    if sum(values) == 0:
+      return
     ax = fig.add_axes([0,0,1,1])
     ax.axis('equal')
     ax.pie(values, labels=tags, autopct='%1.2f%%')
@@ -292,4 +216,7 @@ class socio(models.Model):
     }
     self.env['coop2.historial'].create(values)
     
+
+
+  camelidos = fields.One2many('coop2.camelido', 'socio_id', string="Camelidos")
 

@@ -18,24 +18,33 @@ class camelido_andino(models.Model):
       self.edad = today.year - nac.year - ( (today.month, today.day) < (nac.month, nac.day) )
 
   # Funcion que autocompleta el campo Socio, para saber el socio dueño de la parcela
+  #@api.one
+  #@api.depends('potrero_id')
+  #def get_socio(self):
+  #  if self.potrero_id is not False:
+  #    socio = self.potrero_id.parcela_id.cabana_id.socio_id
+  #    self.nombre_socio = socio.name
+  #    self.socio_id = socio.id
+
+  #@api.one
+  #@api.depends('potrero_id')
+  #def get_socio_id(self):
+  #  if self.potrero_id is not False:
+  #    socio = self.potrero_id.parcela_id.cabana_id.socio_id
+  #    self.socio_id = socio.id
+  
   @api.one
-  @api.depends('potrero_id')
-  def get_socio(self):
-    if self.potrero_id is not False:
-      socio = self.potrero_id.parcela_id.cabana_id.socio_id
-      self.nombre_socio = socio.name
-      self.socio_id = socio.id
-  @api.one
-  @api.depends('potrero_id')
-  def get_socio_id(self):
-    if self.potrero_id is not False:
-      socio = self.potrero_id.parcela_id.cabana_id.socio_id
-      self.socio_id = socio.id
+  @api.depends('socio_id')
+  def get_socio_name(self):
+    if self.socio_id is not False:
+      self.nombre_socio = self.socio_id.name
+
+  
   identificacion = fields.Char(string="Número", required=True, track_visibility="always")
 
   fecha_empadre = fields.Date(string="Fecha de empadre")
   fecha_nac = fields.Date(string="Fecha de naciomiento")
-  edad = fields.Integer(string="Edad", compute="calcula_edad")
+  edad = fields.Integer(string="Edad", compute="calcula_edad", store=True)
   
   # Tipo de identificacion
   tipo_identificacion = fields.Selection([
@@ -228,12 +237,21 @@ class camelido_andino(models.Model):
   
   
   # Campo potrero
+  @api.onchange('socio_id')
+  def onchange_socio(self):
+    for rec in self:
+      #rec.identificacion = rec.socio_id.dni + '-' + rec.identificacion
+      return {'domain': {'potrero_id': [('socio_id', '=', rec.socio_id.id)]}}
+  
+  
   potrero_id = fields.Many2one('coop2.potrero', string="Potrero", track_visibility="always")
 
   
   # obtencion del socio
-  nombre_socio = fields.Char(string="Socio", compute="get_socio")
-  socio_id = fields.Integer(string="id", compute="get_socio_id", store=True)
+  #nombre_socio = fields.Char(string="Socio", compute="get_socio")
+  #socio_id = fields.Integer(string="id", compute="get_socio_id", store=True)
+
+  socio_id = fields.Many2one('res.partner', string="Socio", track_visibility="always", required=True)
   
   # Esquilas
   lista_esquilas = fields.One2many('coop2.esquila', 'camelido_id', string="Esquilas")

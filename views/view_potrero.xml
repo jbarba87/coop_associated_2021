@@ -12,7 +12,7 @@
         <field name="material"/>
         <field name="area_pasto_natural"/>
         <field name="area_pasto_cultivado"/>
-        <field name="total_alpacas_raza"/>
+<!--                  <field name="total_alpacas_raza"/> -->
 
       </tree>
     </field>
@@ -101,7 +101,7 @@
                 <group string="Clasificación por raza">
                   <field name="huacaya"/>
                   <field name="suri"/>
-                  <field name="total_alpacas_raza"/>
+<!--                  <field name="total_alpacas_raza"/> -->
                 </group>
               </group>
               <group string="Porcentaje de saca">

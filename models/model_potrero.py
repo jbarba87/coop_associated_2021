@@ -124,43 +124,86 @@ class potrero(models.Model):
   def calc_hembra(self):
     self.alp_hembra = self.tui_hembra + self.alp_hembra_adulto
 
+  @api.one
+  @api.depends('huacaya', 'suri')
+  def calc_alp_raza(self):
+    self.total_alpacas_raza = self.huacaya + self.suri
+
+  # Alpacas por genero
+  
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_alp_macho_adulto(self):
+    self.alp_macho_adulto = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '>=', 2), ('sexo', '=', 'macho')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_alp_hembra_adulto(self):
+    self.alp_hembra_adulto = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '>=', 2), ('sexo', '=', 'hembra')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_tui_macho(self):
+    self.tui_macho = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 1), ('sexo', '=', 'macho')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_tui_hembra(self):
+    self.tui_hembra = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 1), ('sexo', '=', 'hembra')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_menores(self):
+    self.menores = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 0)])
+
   # Funcion que cuenta las alpacas por genero
   @api.one
   @api.depends('alp_hembra_adulto', 'alp_macho_adulto', 'tui_macho', 'tui_hembra', 'menores')
   def calc_alp_genero(self):
     self.total_alpacas_gen = self.alp_hembra_adulto + self.alp_macho_adulto + self.tui_macho + self.tui_hembra + self.menores
 
-  @api.one
-  @api.depends('huacaya', 'suri')
-  def calc_alp_raza(self):
-    self.total_alpacas_raza = self.huacaya + self.suri
-    
-  # Alpacas por genero
 
-  alp_macho_adulto = fields.Integer(string="Alpacas macho adulto", track_visibility="always")
-  alp_hembra_adulto = fields.Integer(string="Alpacas hembra adulto", track_visibility="always")
+  alp_macho_adulto = fields.Integer(string="Alpacas macho adulto", compute="calc_alp_macho_adulto", track_visibility="always")
+  alp_hembra_adulto = fields.Integer(string="Alpacas hembra adulto", compute="calc_alp_hembra_adulto", track_visibility="always")
   
-  tui_macho = fields.Integer(string="Tui Macho", track_visibility="always")
-  tui_hembra = fields.Integer(string="Tui Hembra", track_visibility="always")
+  tui_macho = fields.Integer(string="Tui Macho", compute="calc_tui_macho", track_visibility="always")
+  tui_hembra = fields.Integer(string="Tui Hembra", compute="calc_tui_hembra", track_visibility="always")
 
   alp_hembra = fields.Integer(string="Alpacas hembra", compute="calc_hembra", store=True)
 
-  menores = fields.Integer(string="Menores", track_visibility="always")
+  menores = fields.Integer(string="Menores", compute="calc_menores", track_visibility="always")
 
   total_alpacas_gen =fields.Integer(string="Total alpacas", compute="calc_alp_genero")
 
   # Alpacas por raza
-  huacaya = fields.Integer(string="Alpacas Huacaya", track_visibility="always")
-  suri = fields.Integer(string="Alpacas Suri", track_visibility="always")
   
-  total_alpacas_raza =fields.Integer(string="Total alpacas", compute="calc_alp_raza", store=True)
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_huacaya(self):
+    self.huacaya = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('raza', '=', 'huacaya')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_suri(self):
+    self.suri = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('raza', '=', 'suri')])
+
+  # Funcion que cuenta las alpacas por genero
+  @api.one
+  @api.depends('huacaya', 'suri')
+  def calc_total_alpacas_raza(self):
+    self.total_alpacas_raza = self.huacaya + self.suri
+
+  huacaya = fields.Integer(string="Alpacas Huacaya", compute="calc_huacaya", track_visibility="always")
+  suri = fields.Integer(string="Alpacas Suri", compute="calc_suri", track_visibility="always")
+  
+#  total_alpacas_raza = fields.Integer(string="Total alpacas", compute="calc_total_alpacas_raza", store=True)
  
   ###### SACA ANUAL #############
   @api.one
   @api.depends('saca')
   def calc_saca(self):
-    if self.total_alpacas_raza != 0:
-      self.porc_saca = (self.saca/self.total_alpacas_raza)*100.0
+    if self.total_alpacas_gen != 0:
+      self.porc_saca = (self.saca/self.total_alpacas_gen)*100.0
     else:
       self.porc_saca = 0.0
 
