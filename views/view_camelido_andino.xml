@@ -23,12 +23,17 @@
     <field name="arch" type="xml">
       <form>
         <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+              <field name="active" widget="boolean_button" options="{&quot;terminology&quot;:&quot;archive&quot;}"/>
+            </button>
+          </div>
           <group string="Información general">
             <group>
               <field name="identificacion"/>
               <field name="tipo_identificacion"/>
-              <field name="activo"  widget="boolean_button"/>
-              <field name="baja_motivo" attrs="{'invisible':[('activo', '=', 'si')]}"/>
+             <!-- <field name="activo"  widget="boolean_button"/> -->
+              <field name="baja_motivo" attrs="{'invisible':[('active', '=', True)]}"/>
               <field name="fecha_empadre"/>
               <field name="fecha_nac"/>
               <field name="edad"/>
@@ -133,6 +138,18 @@
     </field>
   </record>
 
+    <record id="search_camel_socio" model="ir.ui.view">
+      <field name="name">camel.filter.socio</field>
+      <field name="model">coop2.camelido</field>
+      <field name="arch" type="xml">
+        <search string="Busqueda por socio">
+          <field name="identificacion" filter_domain="['|',('identificacion', 'ilike', self),('socio_id.name', 'ilike', self)]" />
+          <field name="socio_id" />
+          <filter string="Archivados" name="archivados" domain="[('active', '=', False)]"/>
+        </search>
+
+      </field>
+    </record>
 
   <record id="action_camelido" model="ir.actions.act_window">
     <field name="name">Camelido</field>

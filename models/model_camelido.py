@@ -258,10 +258,11 @@ class camelido_andino(models.Model):
   
   
   # Baja del animal
-  activo = fields.Selection([
-    ('si', 'Sí'),
-    ('no', 'No'),
-  ], default="si", string="Activo")
+#  activo = fields.Selection([
+#    ('si', 'Sí'),
+#    ('no', 'No'),
+#  ], default="si", string="Activo")
+  active = fields.Boolean(default=True, string='Active')
   
   baja_motivo = fields.Selection([
     ('muerte', 'Muerte'),
@@ -270,8 +271,20 @@ class camelido_andino(models.Model):
   
   
   # Apareamiento
+
 #  apareamiento = fields.One2many('coop2.apareamiento', 'camelido_id', string="Apareamiento")
-  
-  
-  
-  
+
+
+#  @api.multi
+#  def write(self, vals):
+#    print("            Overriding camelido")
+#    res = super(camelido_andino, self).write(vals)
+#    return res
+    
+#  @api.model
+#  def create(self, vals):
+#    print("            Creando camelido")
+#    res = super(camelido_andino, self).create(vals)
+#    return res
+
+
