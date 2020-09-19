@@ -9,6 +9,7 @@
         <field name="identificacion"/>
        <!--  <field name="nombre_socio"/>-->
         <field name="socio_id"/>
+        <field name="edad"/>
         <field name="sexo"/>
         <field name="raza"/>
         <field name="color"/>
@@ -37,6 +38,7 @@
               <field name="fecha_empadre"/>
               <field name="fecha_nac"/>
               <field name="edad"/>
+
               <field name="socio_id" domain="[('es_socio', '=', True)]"/>
               <field name="potrero_id"/>
               <!--<field name="nombre_socio"/> -->
@@ -49,8 +51,7 @@
               <field name="categoria"/>
               <field name="cond_adquisicion"/>
               <field name="peso"/>
-              <field name="esquila" widget="radio"/>
-              <field name="num_esquila" attrs="{'invisible':[('esquila', '==', 'no')]}"/>
+              <field name="num_esquila"/>
             </group>
           </group>
           <notebook>

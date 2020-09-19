@@ -140,8 +140,9 @@
               <field name="num_fichas_camelidos"/>
               <field name="camelidos" context="{'default_socio_id': active_id, 'default_identificacion': dni + '-'}" >
                 <tree >
-                  <field name="identificacion"  />
+                  <field name="identificacion"/>
                   <field name="potrero_id"/>
+                  <field name="edad"/>
                   <field name="raza"/>
                   <field name="color"/>
                 </tree>

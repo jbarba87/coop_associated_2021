@@ -9,6 +9,15 @@ class camelido_andino(models.Model):
   _inherit = ['mail.thread', 'mail.activity.mixin'] # for Chatter
   _rec_name = "identificacion"
   
+  ## Constrains
+
+  @api.constrains('peso')
+  def check_peso(self):
+    for rec in self:
+      if self.peso > 85:
+        raise ValidationError('El peso de la alpaca no debe exceder los 85 Kg.')
+  
+  # Compute age from birth date
   @api.one
   @api.depends('fecha_nac')
   def calcula_edad(self):
@@ -17,28 +26,106 @@ class camelido_andino(models.Model):
       nac = fields.Date.from_string(self.fecha_nac)
       self.edad = today.year - nac.year - ( (today.month, today.day) < (nac.month, nac.day) )
 
-  # Funcion que autocompleta el campo Socio, para saber el socio dueño de la parcela
-  #@api.one
-  #@api.depends('potrero_id')
-  #def get_socio(self):
-  #  if self.potrero_id is not False:
-  #    socio = self.potrero_id.parcela_id.cabana_id.socio_id
-  #    self.nombre_socio = socio.name
-  #    self.socio_id = socio.id
 
-  #@api.one
-  #@api.depends('potrero_id')
-  #def get_socio_id(self):
-  #  if self.potrero_id is not False:
-  #    socio = self.potrero_id.parcela_id.cabana_id.socio_id
-  #    self.socio_id = socio.id
+
+  #### Fields according to the technical data
   
   @api.one
-  @api.depends('socio_id')
-  def get_socio_name(self):
-    if self.socio_id is not False:
-      self.nombre_socio = self.socio_id.name
+  @api.depends('categoria_vellon_value')
+  def select_categoria_vellon(self):
+    if self.categoria_vellon_value is not False:
+      if self.categoria_vellon_value > 50:
+        self.categoria_vellon = 'extrafina'
+      if self.categoria_vellon_value < 51 and self.categoria_vellon_value > 10:
+        self.categoria_vellon = 'fina'
+      if self.categoria_vellon_value < 11:
+        self.categoria_vellon = 'media'
 
+ 
+  @api.one
+  @api.depends('longitud_mecha_value')
+  def select_longitud_mecha(self):
+    if self.longitud_mecha_value is not False:
+      if self.categoria_vellon_value > 3:
+        self.longitud_mecha = 'crec_mayor'
+      if self.longitud_mecha_value < 4:
+        self.longitud_mecha = 'crec_menor'
+
+
+  @api.one
+  @api.depends('densidad_value')
+  def select_densidad(self):
+    if self.densidad_value is not False:
+      if self.densidad_value > 2:
+        self.densidad = 'alta'
+      if self.densidad_value < 3:
+        self.densidad = 'baja'
+
+
+  @api.one
+  @api.depends('rizo_value')
+  def select_rizo(self):
+    if self.rizo_value is not False:
+      if self.rizo_value > 3:
+        self.rizo_ondulacion = 'con riso'
+      if self.rizo_value < 4:
+        self.rizo_ondulacion = 'sin riso'
+
+  @api.one
+  @api.depends('uniformidad_value')
+  def select_uniformidad(self):
+    if self.uniformidad_value is not False:
+      if self.uniformidad_value > 3:
+        self.uniformidad = 'homogeneo'
+      if self.uniformidad_value < 4:
+        self.uniformidad = 'no homogeneo'
+
+
+  # Functions onchange who add domain constrains using self, which limit the search to the own associated
+  @api.onchange('socio_id')
+  def onchange_socio(self):
+    for rec in self:
+      if rec.socio_id.dni is not False:
+        rec.identificacion = str(rec.socio_id.dni) + '-'
+      # rec and self both work properly
+        return {'domain': {'potrero_id': [('socio_id', '=', rec.socio_id.id)],
+        'cod_padre': [('socio_id.id', '=', self.socio_id.id), ('sexo', '=', 'macho'),('identificacion', '!=', rec.identificacion)],
+        'cod_madre': [('socio_id.id', '=', rec.socio_id.id), ('sexo', '=', 'hembra'),('identificacion', '!=', rec.identificacion)],
+        'cod_abuelo': [('socio_id.id', '=', rec.socio_id.id), ('sexo', '=', 'macho'),('identificacion', '!=', rec.identificacion)],
+        'cod_abuela': [('socio_id.id', '=', rec.socio_id.id), ('sexo', '=', 'hembra'),('identificacion', '!=', rec.identificacion)],
+        'cod_bisabuelo': [('socio_id.id', '=', rec.socio_id.id), ('sexo', '=', 'macho'),('identificacion', '!=', rec.identificacion)],
+        'cod_bisabuela': [('socio_id.id', '=', rec.socio_id.id), ('sexo', '=', 'hembra'),('identificacion', '!=', rec.identificacion)],
+      }}
+      
+  @api.onchange('sexo')
+  def onchange_identificacion(self):
+    for rec in self:
+      #rec.identificacion = rec.socio_id.dni + '-' + rec.identificacion
+      # rec and self both work properly
+      return {'domain': {'potrero_id': [('socio_id', '=', self.socio_id.id)],
+        'cod_padre': [('socio_id.id', '=', self.socio_id.id), ('sexo', '=', 'macho'),('identificacion', '!=', self.identificacion)],
+        'cod_madre': [('socio_id.id', '=', self.socio_id.id), ('sexo', '=', 'hembra'),('identificacion', '!=', self.identificacion)],
+        'cod_abuelo': [('socio_id.id', '=', self.socio_id.id), ('sexo', '=', 'macho'),('identificacion', '!=', self.identificacion)],
+        'cod_abuela': [('socio_id.id', '=', self.socio_id.id), ('sexo', '=', 'hembra'),('identificacion', '!=', self.identificacion)],
+        'cod_bisabuelo': [('socio_id.id', '=', self.socio_id.id), ('sexo', '=', 'macho'),('identificacion', '!=', self.identificacion)],
+        'cod_bisabuela': [('socio_id.id', '=', self.socio_id.id), ('sexo', '=', 'hembra'),('identificacion', '!=', self.identificacion)],
+      }}
+
+
+  # Function to calculate the total score for the camel
+  @api.one
+  @api.depends('categoria_vellon_value', 'longitud_mecha_value', 'densidad_value', 'rizo_value' ,'uniformidad_value', 'cabeza_value', 'talla_value', 'calze_value', 'ap_general_value')
+  def calc_total(self):
+    self.general_value = self.categoria_vellon_value + self.longitud_mecha_value + self.densidad_value + self.rizo_value + self.uniformidad_value + self.cabeza_value + self.talla_value + self.calze_value + self.ap_general_value
+
+  # Function to count the 
+  @api.one
+  @api.depends('lista_esquilas.camelido_id')
+  def contar_esquilas(self):
+    self.num_esquila = self.env["coop2.esquila"].search_count([('camelido_id', '=', self.id)])
+
+
+  #### Fields
   
   identificacion = fields.Char(string="Número", required=True, track_visibility="always")
 
@@ -54,17 +141,7 @@ class camelido_andino(models.Model):
     ('otro', 'Otro'),
   ], default="tatuaje", string="Tipo de identificación", track_visibility="always")
 
-
-
-  # Campos relacionales
-  cod_padre = fields.Many2one('coop2.camelido', string="Código del padre", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]" )
-  cod_madre = fields.Many2one('coop2.camelido', string="Código de la madre", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
-  cod_abuelo = fields.Many2one('coop2.camelido', string="Código del abuelo", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]" )
-  cod_abuela = fields.Many2one('coop2.camelido', string="Código de la abuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
-  cod_bisabuelo = fields.Many2one('coop2.camelido', string="Código del bisabuelo", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]")
-  cod_bisabuela = fields.Many2one('coop2.camelido', string="Código de la bisabuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
-  
-  
+ 
   peso = fields.Float(string="Peso (kg)", track_visibility="always")
   
   
@@ -97,27 +174,22 @@ class camelido_andino(models.Model):
     ('prestado', 'Prestado'),
   ], string="Condición de adquisición")
 
-  esquila = fields.Selection([('si', 'Sí'), ('no', 'No')], default="no", string="Esquila")
+  num_esquila = fields.Integer(string="Número de esquila", compute="contar_esquilas")
 
-  num_esquila = fields.Selection([(x, str(x)) for x in range(0, 6)], default='0', string="Número de esquila")
 
-# Caracteristicas del Vellon
-  # Propiedades fisicas
-  
-  #### Campos segun la ficha tecnica
-  
-  
-  @api.one
-  @api.depends('categoria_vellon_value')
-  def select_categoria_vellon(self):
-    if self.categoria_vellon_value is not False:
-      if self.categoria_vellon_value > 50:
-        self.categoria_vellon = 'extrafina'
-      if self.categoria_vellon_value < 51 and self.categoria_vellon_value > 10:
-        self.categoria_vellon = 'fina'
-      if self.categoria_vellon_value < 11:
-        self.categoria_vellon = 'media'
+  #observaciones
+  observaciones = fields.Text(string="Observaciones")
 
+  # Baja del animal
+  active = fields.Boolean(default=True, string='Active')
+  
+  baja_motivo = fields.Selection([
+    ('muerte', 'Muerte'),
+    ('transferencia', 'Transferencia'),
+  ], string="Motivo")
+
+
+  ## Technical data
   
   categoria_vellon = fields.Selection([
     ('extrafina', 'Extrafina < 18 u'),
@@ -125,16 +197,6 @@ class camelido_andino(models.Model):
     ('media', 'Media >= 22 < 28 u'),
   ], string="Categoria", compute="select_categoria_vellon")
   categoria_vellon_value = fields.Selection([(x, str(x)) for x in range(0, 61)], string="Finura")
-  
-  
-  @api.one
-  @api.depends('longitud_mecha_value')
-  def select_longitud_mecha(self):
-    if self.longitud_mecha_value is not False:
-      if self.categoria_vellon_value > 3:
-        self.longitud_mecha = 'crec_mayor'
-      if self.longitud_mecha_value < 4:
-        self.longitud_mecha = 'crec_menor'
  
   longitud_mecha = fields.Selection([
     ('crec_mayor', 'Crecimiento anual > 7.5cm'),
@@ -142,46 +204,17 @@ class camelido_andino(models.Model):
   ], string="Longitud de fibra", compute="select_longitud_mecha")
   longitud_mecha_value = fields.Selection([(x, str(x)) for x in range(0, 9)], string="Longitud")
   
-
-  @api.one
-  @api.depends('densidad_value')
-  def select_densidad(self):
-    if self.densidad_value is not False:
-      if self.densidad_value > 2:
-        self.densidad = 'alta'
-      if self.densidad_value < 3:
-        self.densidad = 'baja'
-
   densidad = fields.Selection([
     ('alta', 'Alta: Vellón compacto'),
     ('baja', 'Baja: Vellón flojo'),
   ], string="Densidad", compute="select_densidad")
   densidad_value = fields.Selection([(x, str(x)) for x in range(0, 6)], string="Densidad")
 
-
-  @api.one
-  @api.depends('rizo_value')
-  def select_rizo(self):
-    if self.rizo_value is not False:
-      if self.rizo_value > 3:
-        self.rizo_ondulacion = 'con riso'
-      if self.rizo_value < 4:
-        self.rizo_ondulacion = 'sin riso'
-
   rizo_ondulacion = fields.Selection([
     ('con riso', 'Con riso'),
     ('sin riso', 'Sin riso'),
   ], string="Rizo u ondulación", compute="select_rizo")
   rizo_value = fields.Selection([(x, str(x)) for x in range(0, 9)], string="Rizo")
-
-  @api.one
-  @api.depends('uniformidad_value')
-  def select_uniformidad(self):
-    if self.uniformidad_value is not False:
-      if self.uniformidad_value > 3:
-        self.uniformidad = 'homogeneo'
-      if self.uniformidad_value < 4:
-        self.uniformidad = 'no homogeneo'
 
   uniformidad = fields.Selection([
     ('homogeneo', 'Homogéneo'),
@@ -190,7 +223,22 @@ class camelido_andino(models.Model):
   uniformidad_value = fields.Selection([(x, str(x)) for x in range(0, 5)], string="Uniformidad")
 
 
+  # Conformacion
+  cabeza_descripcion = fields.Char(string="Cabeza")
+  cabeza_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')], default="0")
+  
+  talla_descripcion  = fields.Char(string="Talla")
+  talla_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')], default="0")
+  
+  calze_descripcion  = fields.Char(string="Calce")
+  calze_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
+  
+  ap_general_descripcion  = fields.Char(string="Apariencia General")
+  ap_general_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
 
+  defectos = fields.Char(string="Defectos")
+
+  general_value = fields.Integer(string="Puntuación", compute="calc_total")
 
   #### Campos que no se donde poner
   diametro = fields.Float(string="Diámetro")
@@ -207,68 +255,28 @@ class camelido_andino(models.Model):
     ('corta', 'Alpaca Corta'),
   ], default="baby", string="Clasificación del Vellón")
   
-  # Conformacion
-  cabeza_descripcion = fields.Char(string="Cabeza")
-  cabeza_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')], default="0")
+
+
+  # Family fields
+
+  cod_padre = fields.Many2one('coop2.camelido', string="Código del padre", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]")
+  cod_madre = fields.Many2one('coop2.camelido', string="Código de la madre", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
+  cod_abuelo = fields.Many2one('coop2.camelido', string="Código del abuelo", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]")
+  cod_abuela = fields.Many2one('coop2.camelido', string="Código de la abuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
+  cod_bisabuelo = fields.Many2one('coop2.camelido', string="Código del bisabuelo", domain="[('sexo', '=', 'macho'), ('identificacion', '!=', identificacion)]")
+  cod_bisabuela = fields.Many2one('coop2.camelido', string="Código de la bisabuela", domain="[('sexo', '=', 'hembra'), ('identificacion', '!=', identificacion )]")
   
-  talla_descripcion  = fields.Char(string="Talla")
-  talla_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4')], default="0")
-  
-  calze_descripcion  = fields.Char(string="Calce")
-  calze_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
-  
-  ap_general_descripcion  = fields.Char(string="Apariencia General")
-  ap_general_value = fields.Selection([(0, '0'), (1, '1'), (2, '2'), (3, '3')], default="0")
-
-  defectos = fields.Char(string="Defectos")
-
-
-  @api.one
-  @api.depends('categoria_vellon_value', 'longitud_mecha_value', 'densidad_value', 'rizo_value' ,'uniformidad_value', 'cabeza_value', 'talla_value', 'calze_value', 'ap_general_value')
-  def calc_total(self):
-    self.general_value = self.categoria_vellon_value + self.longitud_mecha_value + self.densidad_value + self.rizo_value + self.uniformidad_value + self.cabeza_value + self.talla_value + self.calze_value + self.ap_general_value
-
-  general_value = fields.Integer(string="Puntuación", compute="calc_total")
-
-
-
-  #observaciones
-  observaciones = fields.Text(string="Observaciones")
-  
-  
-  # Campo potrero
-  @api.onchange('socio_id')
-  def onchange_socio(self):
-    for rec in self:
-      #rec.identificacion = rec.socio_id.dni + '-' + rec.identificacion
-      return {'domain': {'potrero_id': [('socio_id', '=', rec.socio_id.id)]}}
-  
-  
-  potrero_id = fields.Many2one('coop2.potrero', string="Potrero", track_visibility="always")
-
   
   # obtencion del socio
   #nombre_socio = fields.Char(string="Socio", compute="get_socio")
   #socio_id = fields.Integer(string="id", compute="get_socio_id", store=True)
 
   socio_id = fields.Many2one('res.partner', string="Socio", track_visibility="always", required=True)
+  potrero_id = fields.Many2one('coop2.potrero', string="Potrero", track_visibility="always")
   
   # Esquilas
   lista_esquilas = fields.One2many('coop2.esquila', 'camelido_id', string="Esquilas")
-  
-  
-  # Baja del animal
-#  activo = fields.Selection([
-#    ('si', 'Sí'),
-#    ('no', 'No'),
-#  ], default="si", string="Activo")
-  active = fields.Boolean(default=True, string='Active')
-  
-  baja_motivo = fields.Selection([
-    ('muerte', 'Muerte'),
-    ('transferencia', 'Transferencia'),
-  ], string="Motivo")
-  
+
   
   # Apareamiento
 

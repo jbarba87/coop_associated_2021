@@ -15,12 +15,24 @@ class socio(models.Model):
 
   _inherit = "res.partner"
 
-
+  ## SQL constrain for DNI
   _sql_constraints = [
     ('DNI_unico', 'unique (dni)', 'Ya existe un socio con ese número de DNI.')
   ]
-  
-  # Funcion que cuenta el numero de camelidos del socio
+
+
+  # Constrains for DNI
+  @api.constrains('dni')
+  def check_dni(self):
+    for rec in self:
+      if len(rec.dni) < 8:
+        raise ValidationError('El campo DNI debe tener 8 digitos.')
+      if not rec.dni.isnumeric():
+        raise ValidationError('El campo DNI solo debe contener números.')
+
+
+
+  ## Computed fields: records for cabana, parcela, potrero and camelido
   @api.one
   @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
   def contar_camelidos(self):
@@ -44,16 +56,7 @@ class socio(models.Model):
     self.num_potreros = self.env["coop2.potrero"].search_count([('socio_id', '=', self.id)])
 
 
-  es_socio = fields.Boolean(default = False, string="Es socio?")
-  cabanas = fields.One2many('coop2.cabana', 'socio_id', string="Cabañas")
-  
-  
-  # Campos computados para estadistica
-  num_fichas_camelidos = fields.Integer(string="Fichas de camelidos", compute="contar_camelidos")
-  num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas", store=True)
-  num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas", store=True)
-  num_potreros = fields.Integer(string="Numero de potreros", compute="contar_potreros", store=True)
-  
+  # Computed fields: record for camels types.
   @api.one
   @api.depends('cabanas.parcelas.potreros.camelidos.socio_id')
   def contar_huacayos(self):
@@ -74,21 +77,68 @@ class socio(models.Model):
   def contar_hembras(self):
     self.num_alpacas_hembra = self.env["coop2.camelido"].search_count([('socio_id', '=', self.id), ('sexo', '=', 'hembra')])
 
-#  num_alpacas_huacayo = fields.Integer(string="Alpacas Huacayo", compute="contar_huacayos", store=True)
-#  num_alpacas_suri = fields.Integer(string="Alpacas Suri", compute="contar_suris", store=True)
-#  num_alpacas_macho = fields.Integer(string="Alpacas Macho", compute="contar_machos", store=True)
-#  num_alpacas_hembra = fields.Integer(string="Alpacas Hembra", compute="contar_hembras", store=True)
- 
- 
-  # Campos personales y sus funciones
-  @api.constrains('dni')
-  def check_dni(self):
-    for rec in self:
-      if len(rec.dni) < 8:
-        raise ValidationError('El campo DNI debe tener 8 digitos.')
-      if not rec.dni.isnumeric():
-        raise ValidationError('El campo DNI solo debe contener números.')
- 
+
+
+  ## Computed field: Total number of sons
+  @api.one
+  @api.depends('num_hijos_1', 'num_hijos_2', 'num_hijos_3', 'num_hijos_4', 'num_hijos_5')
+  def calc_hijos(self):
+    self.num_hijos_total = self.num_hijos_1 + self.num_hijos_2 + self.num_hijos_3 + self.num_hijos_4 + self.num_hijos_5
+
+
+  ## Computed field: Total number of camels
+  @api.one
+  @api.depends('macho_adulto_total', 'hembra_adulto_total', 'tui_macho_total', 'tui_hembra_total', 'menores_total')
+  def calc_alpacas(self):
+    self.alpacas_total = self.macho_adulto_total + self.hembra_adulto_total + self.tui_macho_total + self.tui_hembra_total + self.menores_total
+
+
+  # Computed graph according to the fields about camels
+  @api.one
+  @api.depends('macho_adulto_total', 'hembra_adulto_total', 'tui_macho_total', 'tui_hembra_total', 'menores_total')
+  def grafica_camelidos(self):
+    print("       Generating graphs")
+    fig = plt.figure()
+    buf = BytesIO()
+    tags = ['Macho adulto', 'hembra adulta', 'tui macho', 'tui hembra', 'menores']
+    values = [self.macho_adulto_total, self.hembra_adulto_total, self.tui_macho_total, self.tui_hembra_total, self.menores_total]
+    if sum(values) == 0:
+      return
+    ax = fig.add_axes([0,0,1,1])
+    ax.axis('equal')
+    ax.pie(values, labels=tags, autopct='%1.2f%%')
+    
+    fig.savefig(buf, format="png")
+    self.camel_graph_percentage = base64.encodestring(buf.getbuffer())
+
+
+
+  # Function which takes a snapshot, activated by a button in the view
+  def socio_registrar_muestra_camelido(self):
+    t = datetime.today()
+    print("    EScribiendo datos")
+    values = {
+      'fecha_muestreo': t.strftime("%Y-%m-%d"),
+      'socio_id': self.id,
+      'cant_suri': self.suri_total,
+      'cant_huacaya': self.huacaya_total,
+      'cant_macho_adulto': self.macho_adulto_total,
+      'cant_hembra_adulto': self.hembra_adulto_total,
+      'cant_tui_macho': self.tui_macho_total,
+      'cant_tui_hembra': self.tui_hembra_total,
+      'cant_menores': self.menores_total,
+      'total_camelidos': self.alpacas_total,
+    }
+    self.env['coop2.historial'].create(values)
+    
+
+
+  ######  Fields
+
+
+  es_socio = fields.Boolean(default = False, string="¿Es socio?")
+  cabanas = fields.One2many('coop2.cabana', 'socio_id', string="Cabañas")
+  camelidos = fields.One2many('coop2.camelido', 'socio_id', string="Camélidos")
 
   # Campos personales
   dni = fields.Char(string="DNI", size=8, required=True)
@@ -132,12 +182,6 @@ class socio(models.Model):
 
 	## CAMPOS AGREGADOS DEBIDO AL DOCUMENTO #### 
 
-  @api.one
-  @api.depends('num_hijos_1', 'num_hijos_2', 'num_hijos_3', 'num_hijos_4', 'num_hijos_5')
-  def calc_hijos(self):
-    self.num_hijos_total = self.num_hijos_1 + self.num_hijos_2 + self.num_hijos_3 + self.num_hijos_4 + self.num_hijos_5
-
-
   num = [(x, str(x)) for x in range(1, 10)]
   num_hijos_1 = fields.Selection(num, string="Hijos de 0 a 5 años")
   num_hijos_2 = fields.Selection(num, string="Hijos de 6 a 10 años")
@@ -152,71 +196,35 @@ class socio(models.Model):
   ##### CAMPOS PARA LAS ESTADISTICAS
   ###################################################  
   
-  # Obtencion de la data por cada potrero
+  num_fichas_camelidos = fields.Integer(string="Fichas de camelidos", compute="contar_camelidos")
+  num_cabanas = fields.Integer(string="Numero de cabañas", compute="contar_cabanas", store=True)
+  num_parcelas = fields.Integer(string="Numero de parcelas", compute="contar_parcelas", store=True)
+  num_potreros = fields.Integer(string="Numero de potreros", compute="contar_potreros", store=True)
+  
 
+#  num_alpacas_huacayo = fields.Integer(string="Alpacas Huacayo", compute="contar_huacayos", store=True)
+#  num_alpacas_suri = fields.Integer(string="Alpacas Suri", compute="contar_suris", store=True)
+#  num_alpacas_macho = fields.Integer(string="Alpacas Macho", compute="contar_machos", store=True)
+#  num_alpacas_hembra = fields.Integer(string="Alpacas Hembra", compute="contar_hembras", store=True)
+ 
 
+  # Total of camels registered to the associated
   suri_total = fields.Integer(string="Alpacas Suri")
   huacaya_total = fields.Integer(string="Alpacas Huacaya")
   macho_adulto_total = fields.Integer(string="Alpacas Macho adulto")
   hembra_adulto_total = fields.Integer(string="Alpacas Hembra adulto")
   tui_macho_total = fields.Integer(string="Tui macho")
   tui_hembra_total = fields.Integer(string="Tui hembra")
-
   alp_hembra_total = fields.Integer(string="Alpacas Hembra")
-  
   menores_total = fields.Integer(string="Menores")
-  
-  
-  @api.one
-  @api.depends('macho_adulto_total', 'hembra_adulto_total', 'tui_macho_total', 'tui_hembra_total', 'menores_total')
-  def calc_alpacas(self):
-    self.alpacas_total = self.macho_adulto_total + self.hembra_adulto_total + self.tui_macho_total + self.tui_hembra_total + self.menores_total
 
-  
   alpacas_total = fields.Integer(string="Total alpacas", compute="calc_alpacas", store=True)
 
 
-
-
-  @api.one
-  @api.depends('macho_adulto_total', 'hembra_adulto_total', 'tui_macho_total', 'tui_hembra_total', 'menores_total')
-  def grafica_camelidos(self):
-    print("       Generating graphs")
-    fig = plt.figure()
-    buf = BytesIO()
-    tags = ['Macho adulto', 'hembra adulta', 'tui macho', 'tui hembra', 'menores']
-    values = [self.macho_adulto_total, self.hembra_adulto_total, self.tui_macho_total, self.tui_hembra_total, self.menores_total]
-    if sum(values) == 0:
-      return
-    ax = fig.add_axes([0,0,1,1])
-    ax.axis('equal')
-    ax.pie(values, labels=tags, autopct='%1.2f%%')
-    
-    fig.savefig(buf, format="png")
-    self.camel_graph_percentage = base64.encodestring(buf.getbuffer())
-
-  # image
+  # Pye image of the camels
   camel_graph_percentage = fields.Binary(compute="grafica_camelidos")
-  
-  
-  def socio_registrar_muestra_camelido(self):
-    t = datetime.today()
-    print("    EScribiendo datos")
-    values = {
-      'fecha_muestreo': t.strftime("%Y-%m-%d"),
-      'socio_id': self.id,
-      'cant_suri': self.suri_total,
-      'cant_huacaya': self.huacaya_total,
-      'cant_macho_adulto': self.macho_adulto_total,
-      'cant_hembra_adulto': self.hembra_adulto_total,
-      'cant_tui_macho': self.tui_macho_total,
-      'cant_tui_hembra': self.tui_hembra_total,
-      'cant_menores': self.menores_total,
-      'total_camelidos': self.alpacas_total,
-    }
-    self.env['coop2.historial'].create(values)
-    
 
 
-  camelidos = fields.One2many('coop2.camelido', 'socio_id', string="Camelidos")
+
+
 

@@ -74,19 +74,20 @@
             <page string="Observaciones">
               <field name="observaciones"/>
             </page>
-            <!--
-            <page string="Camelidos">
-              <field name="camelidos">
-                <tree editable="bottom">
-                  <field name="identificacion"/>
-                  <field name="potrero_id"/>
-                  <field name="nombre_socio"/>
-                  <field name="fecha_empadre"/>
-                  <field name="fecha_nac"/>
-                  <field name="edad"/>
-                </tree>
-              </field>
-            </page>-->
+
+            <page string="Camélidos del potrero">
+              <group>
+                <field name="camelidos">
+                  <tree editable="bottom">
+                    <field name="identificacion"/>
+                    <field name="fecha_nac"/>
+                    <field name="edad"/>
+                    <field name="raza"/>
+                    <field name="color"/>
+                  </tree>
+                </field>
+              </group>
+            </page>
             <page string="Camelidos">
               <group>
                 <group string="Clasificación por edad/género">

@@ -11,6 +11,12 @@ class potrero(models.Model):
   _inherit = ['mail.thread', 'mail.activity.mixin'] # for Chatter
   _rec_name = "nombre_potrero"
 
+  ### Constrains
+  @api.constrains('area', 'area_pasto_natural', 'area_pasto_cultivado', 'area_bofedales', 'area_ereazeos', 'otros')
+  def check_area(self):
+    if self.area < 0.0 or self.area_pasto_natural < 0.0 or self.area_pasto_cultivado < 0.0 or self.area_bofedales < 0.0 or self.area_ereazeos < 0.0 or self.otros < 0.0:
+      raise ValidationError('El área no puede ser negativa.')
+
 
   # Funcion que cuenta la cantidad de camelidos del potrero
   @api.one
@@ -20,7 +26,7 @@ class potrero(models.Model):
       self.num_camelidos = self.env["coop2.camelido"].search_count([('potrero_id', '=', self.id)])
 
 
-  # Funcion que autocompleta el campo Socio, para saber el socio dueño de la parcela
+  # Functions to get the associated data
   @api.one
   @api.depends('parcela_id')
   def get_socio(self):
@@ -28,7 +34,6 @@ class potrero(models.Model):
     if self.parcela_id is not False:
       socio = self.parcela_id.cabana_id.socio_id
       self.nombre_socio = socio.name
-
 
   @api.one
   @api.depends('parcela_id')
@@ -38,15 +43,106 @@ class potrero(models.Model):
       self.socio_id = socio.id
 
 
+
+  # Functions to get the type of camels
+  
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_huacaya(self):
+    self.huacaya = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('raza', '=', 'huacaya')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_suri(self):
+    self.suri = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('raza', '=', 'suri')])
+
+  # Funcion que cuenta las alpacas por genero
+  @api.one
+  @api.depends('huacaya', 'suri')
+  def calc_total_alpacas_raza(self):
+    self.total_alpacas_raza = self.huacaya + self.suri
+
+
+
+
+  
+  ###### DATOS DE LOS CAMELIDOS #############
+
+  # Function to calculate female camel
+  @api.one
+  @api.depends('tui_hembra', 'alp_hembra_adulto')
+  def calc_hembra(self):
+    self.alp_hembra = self.tui_hembra + self.alp_hembra_adulto
+
+  # Function to calculate total camels by race
+  @api.one
+  @api.depends('huacaya', 'suri')
+  def calc_alp_raza(self):
+    self.total_alpacas_raza = self.huacaya + self.suri
+
+
+  # Functions wich calculate camels by gender and age  
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_alp_macho_adulto(self):
+    self.alp_macho_adulto = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '>=', 2), ('sexo', '=', 'macho')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_alp_hembra_adulto(self):
+    self.alp_hembra_adulto = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '>=', 2), ('sexo', '=', 'hembra')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_tui_macho(self):
+    self.tui_macho = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 1), ('sexo', '=', 'macho')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_tui_hembra(self):
+    self.tui_hembra = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 1), ('sexo', '=', 'hembra')])
+
+  @api.one
+  @api.depends('camelidos.potrero_id')
+  def calc_menores(self):
+    self.menores = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 0)])
+
+  # Total of camels
+  @api.one
+  @api.depends('alp_hembra_adulto', 'alp_macho_adulto', 'tui_macho', 'tui_hembra', 'menores')
+  def calc_alp_genero(self):
+    self.total_alpacas_gen = self.alp_hembra_adulto + self.alp_macho_adulto + self.tui_macho + self.tui_hembra + self.menores
+
+
+  ### Saca per year
+  @api.one
+  @api.depends('saca')
+  def calc_saca(self):
+    if self.total_alpacas_gen != 0:
+      self.porc_saca = (self.saca/self.total_alpacas_gen)*100.0
+    else:
+      self.porc_saca = 0.0
+
+  huacaya = fields.Integer(string="Alpacas Huacaya", compute="calc_huacaya", track_visibility="always")
+  suri = fields.Integer(string="Alpacas Suri", compute="calc_suri", track_visibility="always")
+ 
+ 
+ 
+#  total_alpacas_raza = fields.Integer(string="Total alpacas", compute="calc_total_alpacas_raza", store=True)
+ 
+
+  ####Fields
+
+
   nombre_potrero = fields.Char(string="Nombre del potrero", required = True)
   area = fields.Float(string="Area del potrero (Ha)")
   material = fields.Selection([
     ('madera', 'Madera'),
     ('estera', 'Estera'),
     ('otros', 'otros'),
-  ], default="madera", string="Material del potrero") 
+  ], default="madera", string="Material del potrero", track_visibility="always") 
 
-  area_pasto_natural = fields.Float(string="Area de pastos naturales (Ha)")
+  area_pasto_natural = fields.Float(string="Area de pastos naturales (Ha)", track_visibility="always")
 
   
   # Pasto cultivado
@@ -97,13 +193,10 @@ class potrero(models.Model):
   
   observaciones = fields.Text("Observaciones")
   
-  
-  # Campo computado
-  num_camelidos = fields.Integer(string="Cantidad camelidos", compute="count_camelidos", store=True)
-  
+
   area_bofedales = fields.Float("Area de bofedales totales (Ha)")
   area_ereazeos = fields.Float("Area de zonas ereazeos totales (Ha)")
-  otros = fields.Float("Otros")     # Falta definir
+  otros = fields.Float("Otros")
 
   # Campos relacionales
   parcela_id = fields.Many2one('coop2.parcela', string="Parcela", required=True)
@@ -111,58 +204,15 @@ class potrero(models.Model):
   camelidos = fields.One2many('coop2.camelido', 'potrero_id', string="Camelidos")
   potrero_historial = fields.One2many('coop2.potrerohist', 'potrero_id', string="Historial")
   
+
   # Datos del socio
   nombre_socio = fields.Char(string="Socio", compute="get_socio")
   socio_id = fields.Integer(compute="get_socio_id", store=True)
+   
+  # Computed fields
+  num_camelidos = fields.Integer(string="Cantidad camelidos", compute="count_camelidos", store=True)
   
   
-  ###### DATOS DE LOS CAMELIDOS #############
-
-  # Funcion que cuenta las alpacas hembra
-  @api.one
-  @api.depends('tui_hembra', 'alp_hembra_adulto')
-  def calc_hembra(self):
-    self.alp_hembra = self.tui_hembra + self.alp_hembra_adulto
-
-  @api.one
-  @api.depends('huacaya', 'suri')
-  def calc_alp_raza(self):
-    self.total_alpacas_raza = self.huacaya + self.suri
-
-  # Alpacas por genero
-  
-  @api.one
-  @api.depends('camelidos.potrero_id')
-  def calc_alp_macho_adulto(self):
-    self.alp_macho_adulto = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '>=', 2), ('sexo', '=', 'macho')])
-
-  @api.one
-  @api.depends('camelidos.potrero_id')
-  def calc_alp_hembra_adulto(self):
-    self.alp_hembra_adulto = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '>=', 2), ('sexo', '=', 'hembra')])
-
-  @api.one
-  @api.depends('camelidos.potrero_id')
-  def calc_tui_macho(self):
-    self.tui_macho = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 1), ('sexo', '=', 'macho')])
-
-  @api.one
-  @api.depends('camelidos.potrero_id')
-  def calc_tui_hembra(self):
-    self.tui_hembra = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 1), ('sexo', '=', 'hembra')])
-
-  @api.one
-  @api.depends('camelidos.potrero_id')
-  def calc_menores(self):
-    self.menores = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('edad', '=', 0)])
-
-  # Funcion que cuenta las alpacas por genero
-  @api.one
-  @api.depends('alp_hembra_adulto', 'alp_macho_adulto', 'tui_macho', 'tui_hembra', 'menores')
-  def calc_alp_genero(self):
-    self.total_alpacas_gen = self.alp_hembra_adulto + self.alp_macho_adulto + self.tui_macho + self.tui_hembra + self.menores
-
-
   alp_macho_adulto = fields.Integer(string="Alpacas macho adulto", compute="calc_alp_macho_adulto", track_visibility="always")
   alp_hembra_adulto = fields.Integer(string="Alpacas hembra adulto", compute="calc_alp_hembra_adulto", track_visibility="always")
   
@@ -174,38 +224,6 @@ class potrero(models.Model):
   menores = fields.Integer(string="Menores", compute="calc_menores", track_visibility="always")
 
   total_alpacas_gen =fields.Integer(string="Total alpacas", compute="calc_alp_genero")
-
-  # Alpacas por raza
-  
-  @api.one
-  @api.depends('camelidos.potrero_id')
-  def calc_huacaya(self):
-    self.huacaya = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('raza', '=', 'huacaya')])
-
-  @api.one
-  @api.depends('camelidos.potrero_id')
-  def calc_suri(self):
-    self.suri = self.env['coop2.camelido'].search_count([('potrero_id', '=', self.id), ('raza', '=', 'suri')])
-
-  # Funcion que cuenta las alpacas por genero
-  @api.one
-  @api.depends('huacaya', 'suri')
-  def calc_total_alpacas_raza(self):
-    self.total_alpacas_raza = self.huacaya + self.suri
-
-  huacaya = fields.Integer(string="Alpacas Huacaya", compute="calc_huacaya", track_visibility="always")
-  suri = fields.Integer(string="Alpacas Suri", compute="calc_suri", track_visibility="always")
-  
-#  total_alpacas_raza = fields.Integer(string="Total alpacas", compute="calc_total_alpacas_raza", store=True)
- 
-  ###### SACA ANUAL #############
-  @api.one
-  @api.depends('saca')
-  def calc_saca(self):
-    if self.total_alpacas_gen != 0:
-      self.porc_saca = (self.saca/self.total_alpacas_gen)*100.0
-    else:
-      self.porc_saca = 0.0
 
 
   saca = fields.Integer(string="Saca Anual")
