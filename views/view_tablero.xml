@@ -20,6 +20,8 @@
             <action string="Socios con más de 400 alpacas" name="%(coop2.act_socio_camelido)d" domain="[('es_socio', '=', True), ('alpacas_total', '>', 400)]"/>
           </column>
           <column>
+          
+            <action string="Socios con menos de 100 alpacas" name="%(coop2.act_socio_camelido)d" domain="[('es_socio', '=', True), ('alpacas_total', '&#60;', 100), ('alpacas_total', '!=', 0)]"/>
           </column>
         </board>
       </form>

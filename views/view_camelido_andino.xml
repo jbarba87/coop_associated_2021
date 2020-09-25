@@ -147,8 +147,13 @@
           <field name="identificacion" filter_domain="['|',('identificacion', 'ilike', self),('socio_id.name', 'ilike', self)]" />
           <field name="socio_id" />
           <filter string="Archivados" name="archivados" domain="[('active', '=', False)]"/>
+          <separator/>
+          <filter string="Machos" name="machos" domain="[('sexo', '=', 'macho')]"/>
+          <filter string="Hembras" name="hembras" domain="[('sexo', '=', 'hembra')]"/>
+          <separator/>
+          <filter string="Huacayas" name="huacayas" domain="[('raza', '=', 'huacaya')]"/>
+          <filter string="Suris" name="suris" domain="[('raza', '=', 'suri')]"/>
         </search>
-
       </field>
     </record>
 

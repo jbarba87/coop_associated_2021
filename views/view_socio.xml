@@ -247,7 +247,7 @@
     </record>-->
     
     
-    <!-- Filter View
+
     <record id="view_res_partner_inherit_rearch" model="ir.ui.view">
       <field name="name">res.partner.search.expand.filter</field>
       <field name="model">res.partner</field>
@@ -255,10 +255,13 @@
       <field name="arch" type="xml">
         <xpath expr="//search" position="inside">
           <filter string="Socios" name="filter_socio" domain="[('es_socio', '=', True)]"/>
+          <separator/>
+          <filter string="Departamento" name="group_departamento" context="{'group_by':'departamento_nac'}"/>
+          <filter string="Provincia" name="group_provincia" context="{'group_by':'provincia_nac'}"/>
+
         </xpath>
       </field>
     </record>
-    -->
 
 <!--
     <record id="view_res_partner_inherit_search" model="ir.ui.view">

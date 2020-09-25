@@ -6,10 +6,14 @@ import json
 from datetime import datetime, timedelta
 import os
 
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
+
 import numpy as np
 import base64
 from io import BytesIO
+
 
 class socio(models.Model):
 
@@ -97,7 +101,7 @@ class socio(models.Model):
   @api.one
   @api.depends('macho_adulto_total', 'hembra_adulto_total', 'tui_macho_total', 'tui_hembra_total', 'menores_total')
   def grafica_camelidos(self):
-    print("       Generating graphs")
+    #print("       Generating graphs")
     fig = plt.figure()
     buf = BytesIO()
     tags = ['Macho adulto', 'hembra adulta', 'tui macho', 'tui hembra', 'menores']
@@ -116,7 +120,7 @@ class socio(models.Model):
   # Function which takes a snapshot, activated by a button in the view
   def socio_registrar_muestra_camelido(self):
     t = datetime.today()
-    print("    EScribiendo datos")
+    #print("    EScribiendo datos")
     values = {
       'fecha_muestreo': t.strftime("%Y-%m-%d"),
       'socio_id': self.id,

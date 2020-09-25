@@ -26,7 +26,7 @@ class cabana(models.Model):
   def get_socio(self):
     if self.socio_id is not False:
       socio = self.socio_id
-      print("nombre ", socio.name)
+      #print("nombre ", socio.name)
       self.nombre_socio = socio.name
 
 
