@@ -10,3 +10,7 @@ from . import model_camelido
 from . import model_historial
 from . import model_esquila
 from . import model_potrero_historial
+
+from . import model_asistencia
+from . import model_capacitacion
+from . import model_emp

@@ -170,6 +170,32 @@
           </page>
 
 -->
+
+          <page string="Asistencia y capacitaciones" attrs="{'invisible':[('es_socio', '==', False)]}">
+            <group string="Asistencias del técnico">
+              <field name="asistencias">
+                <tree editable="bottom">
+                  <field name="tecnico_id"/>
+                  <field name="fecha"/>
+                  <field name="tema"/>
+                  <field name="recomendacion"/>
+                  <field name="cumplio"/>
+                </tree>
+              </field>
+            </group>
+            <group string="Capacitaciones del tecnico">
+              <field name="capacitaciones">
+                <tree editable="bottom">
+                  <field name="tecnico_id"/>
+                  <field name="fecha"/>
+                  <field name="tema"/>
+                  <field name="financiacion"/>
+                </tree>
+              </field>
+            </group>
+          </page>
+
+
           <page string="Familia y vivienda" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
               <group string="Caractéristicas de domicilio">

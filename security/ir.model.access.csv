@@ -26,3 +26,10 @@ access_coop2_esquila_manager,access.coop2.esquila.manager,model_coop2_esquila,co
 
 access_coop2_potrerohist_tecnico,access.coop2.potrerohist.tecnico,model_coop2_potrerohist,coop2.group_coop_tecnico,1,1,0,0
 access_coop2_potrerohist_manager,access.coop2.potrerohist,model_coop2_potrerohist,coop2.group_coop_manager,1,1,1,1
+
+
+access_coop2_asistencia_tecnico,access.coop2.asistencia.tecnico,model_coop2_asistencia,coop2.group_coop_tecnico,1,1,0,0
+access_coop2_asistencia_manager,access.coop2.asistencia,model_coop2_asistencia,coop2.group_coop_manager,1,1,1,1
+
+access_coop2_capacitacion_tecnico,access.coop2.capacitacion.tecnico,model_coop2_capacitacion,coop2.group_coop_tecnico,1,1,0,0
+access_coop2_capacitacion_manager,access.coop2.capacitacion,model_coop2_capacitacion,coop2.group_coop_manager,1,1,1,1

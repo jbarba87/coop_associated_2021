@@ -20,9 +20,9 @@ class socio(models.Model):
   _inherit = "res.partner"
 
   ## SQL constrain for DNI
-  _sql_constraints = [
-    ('DNI_unico', 'unique (dni)', 'Ya existe un socio con ese número de DNI.')
-  ]
+  #_sql_constraints = [
+  #  ('DNI_unico', 'unique (dni)', 'Ya existe un socio con ese número de DNI.')
+  #]
 
 
   # Constrains for DNI
@@ -229,6 +229,7 @@ class socio(models.Model):
   camel_graph_percentage = fields.Binary(compute="grafica_camelidos")
 
 
-
-
+  # Capacitaciones y asistencias
+  asistencias = fields.One2many('coop2.asistencia', 'socio_id', string="Asistencias")
+  capacitaciones = fields.One2many('coop2.capacitacion', 'socio_id', string="Capacitaciones")
 
