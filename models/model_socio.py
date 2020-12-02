@@ -152,8 +152,13 @@ class socio(models.Model):
   # Lugar de nacimiento
   distrito_nac = fields.Char(string = "Distrito")
   provincia_nac = fields.Char(string = "Provincia")
-  departamento_nac = fields.Char(string = "Departamento")
-  
+  departamento_nac = fields.Selection([
+    ('Ayacucho', 'Ayacucho'),
+    ('Apurimac', 'Apurimac'),
+    ('Arequipa', 'Arequipa'),
+    ('Cusco', 'Cusco'),
+  ], default="Ayacucho", string="Departamento")
+
   #archive = os.getcwd() + '/addons/coop2/models/dep.txt'
   
   # Importar departamentos

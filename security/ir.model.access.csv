@@ -1,35 +1,56 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-access_coop2_socio_tecnico,access.coop2.socio.tec,model_res_partner,coop2.group_coop_tecnico,1,0,0,0
-access_coop2_socio_manager,access.coop2.socio.man,model_res_partner,coop2.group_coop_manager,1,1,1,1
+access_coop2_socio_tecnico,access.coop2.socio.tec,model_res_partner,coop2.group_coop_tecnico,0,0,0,0
+access_coop2_socio_manager,access.coop2.socio.man,model_res_partner,coop2.group_coop_manager,1,1,0,0
+access_coop2_socio_manager_general,access.coop2.socio.man.general,model_res_partner,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_cabana_tecnico,access.coop2.cabana.tec,model_coop2_cabana,coop2.group_coop_tecnico,1,1,0,0
+
+access_coop2_cabana_tecnico,access.coop2.cabana.tec,model_coop2_cabana,coop2.group_coop_tecnico,1,1,1,0
 access_coop2_cabana_manager,access.coop2.cabana.man,model_coop2_cabana,coop2.group_coop_manager,1,1,1,1
+access_coop2_cabana_manager_general,access.coop2.cabana.man.general,model_coop2_cabana,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_asociacion_tecnico,access.coop2.asociacion.tecnico,model_coop2_asociacion,coop2.group_coop_tecnico,1,1,0,0
+
+access_coop2_asociacion_tecnico,access.coop2.asociacion.tecnico,model_coop2_asociacion,coop2.group_coop_tecnico,1,1,1,0
 access_coop2_asociacion_manager,access.coop2.asociacion.manager,model_coop2_asociacion,coop2.group_coop_manager,1,1,1,1
+access_coop2_asociacion_manager_general,access.coop2.asociacion.manager.general,model_coop2_asociacion,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_parcela_tecnico,access.coop2.parcela.tecnico,model_coop2_parcela,coop2.group_coop_tecnico,1,1,0,0
+
+access_coop2_parcela_tecnico,access.coop2.parcela.tecnico,model_coop2_parcela,coop2.group_coop_tecnico,1,1,1,0
 access_coop2_parcela_manager,access.coop2.parcela.manager,model_coop2_parcela,coop2.group_coop_manager,1,1,1,1
+access_coop2_parcela_manager_general,access.coop2.parcela.manager.general,model_coop2_parcela,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_potrero_tecnico,access.coop2.potrero.tecnico,model_coop2_potrero,coop2.group_coop_tecnico,1,1,0,0
+
+access_coop2_potrero_tecnico,access.coop2.potrero.tecnico,model_coop2_potrero,coop2.group_coop_tecnico,1,1,1,0
 access_coop2_potrero_manager,access.coop2.potrero.manager,model_coop2_potrero,coop2.group_coop_manager,1,1,1,1
+access_coop2_potrero_manager_general,access.coop2.potrero.manager.general,model_coop2_potrero,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_camelido_tecnico,access.coop2.camelido.tecnico,model_coop2_camelido,coop2.group_coop_tecnico,1,1,0,0
+
+access_coop2_camelido_tecnico,access.coop2.camelido.tecnico,model_coop2_camelido,coop2.group_coop_tecnico,1,1,1,0
 access_coop2_camelido_manager,access.coop2.camelido.manager,model_coop2_camelido,coop2.group_coop_manager,1,1,1,1
+access_coop2_camelido_manager_general,access.coop2.camelido.manager.general,model_coop2_camelido,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_historial_tecnico,access.coop2.historial.tecnico,model_coop2_historial,coop2.group_coop_tecnico,1,1,0,0
+
+access_coop2_historial_tecnico,access.coop2.historial.tecnico,model_coop2_historial,coop2.group_coop_tecnico,1,1,1,0
 access_coop2_historial_manager,access.coop2.historial.manager,model_coop2_historial,coop2.group_coop_manager,1,1,1,1
+access_coop2_historial_manager_general,access.coop2.historial.manager.general,model_coop2_historial,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_esquila_tecnico,access.coop2.esquila.tecnico,model_coop2_esquila,coop2.group_coop_tecnico,1,1,0,0
+
+access_coop2_esquila_tecnico,access.coop2.esquila.tecnico,model_coop2_esquila,coop2.group_coop_tecnico,1,1,1,0
 access_coop2_esquila_manager,access.coop2.esquila.manager,model_coop2_esquila,coop2.group_coop_manager,1,1,1,1
-
-access_coop2_potrerohist_tecnico,access.coop2.potrerohist.tecnico,model_coop2_potrerohist,coop2.group_coop_tecnico,1,1,0,0
-access_coop2_potrerohist_manager,access.coop2.potrerohist,model_coop2_potrerohist,coop2.group_coop_manager,1,1,1,1
+access_coop2_esquila_manager_general,access.coop2.esquila.manager.general,model_coop2_esquila,coop2.group_coop_manager_general,1,1,1,1
 
 
-access_coop2_asistencia_tecnico,access.coop2.asistencia.tecnico,model_coop2_asistencia,coop2.group_coop_tecnico,1,1,0,0
-access_coop2_asistencia_manager,access.coop2.asistencia,model_coop2_asistencia,coop2.group_coop_manager,1,1,1,1
+access_coop2_potrerohist_tecnico,access.coop2.potrerohist.tecnico,model_coop2_potrerohist,coop2.group_coop_tecnico,1,1,1,0
+access_coop2_potrerohist_manager,access.coop2.potrerohist.manager,model_coop2_potrerohist,coop2.group_coop_manager,1,1,1,1
+access_coop2_potrerohist_manager_general,access.coop2.potrerohist.manager.general,model_coop2_potrerohist,coop2.group_coop_manager_general,1,1,1,1
 
-access_coop2_capacitacion_tecnico,access.coop2.capacitacion.tecnico,model_coop2_capacitacion,coop2.group_coop_tecnico,1,1,0,0
-access_coop2_capacitacion_manager,access.coop2.capacitacion,model_coop2_capacitacion,coop2.group_coop_manager,1,1,1,1
+
+
+access_coop2_asistencia_tecnico,access.coop2.asistencia.tecnico,model_coop2_asistencia,coop2.group_coop_tecnico,1,1,1,0
+access_coop2_asistencia_manager,access.coop2.asistencia.manager,model_coop2_asistencia,coop2.group_coop_manager,1,1,1,1
+access_coop2_asistencia_manager_general,access.coop2.asistencia.manager.general,model_coop2_asistencia,coop2.group_coop_manager_general,1,1,1,1
+
+
+access_coop2_capacitacion_tecnico,access.coop2.capacitacion.tecnico,model_coop2_capacitacion,coop2.group_coop_tecnico,1,1,1,0
+access_coop2_capacitacion_manager,access.coop2.capacitacion.manager,model_coop2_capacitacion,coop2.group_coop_manager,1,1,1,1
+access_coop2_capacitacion_manager_general,access.coop2.capacitacion.manager.general,model_coop2_capacitacion,coop2.group_coop_manager_general,1,1,1,1
