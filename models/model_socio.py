@@ -230,5 +230,9 @@ class socio(models.Model):
 
 
 
+  # Capacitaciones y asistencias
+  asistencias = fields.One2many('coop2.asistencia', 'socio_id', string="Asistencias")
+  capacitaciones = fields.One2many('coop2.capacitacion', 'socio_id', string="Capacitaciones")
+
 
 

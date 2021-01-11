@@ -43,6 +43,13 @@ class potrero(models.Model):
       self.socio_id = socio.id
 
 
+  # Funcion que autocompleta el campo nombre al elegir el socio
+  @api.onchange('parcela_id')
+  def onchange_socio(self):
+    for rec in self:
+      if rec.parcela_id.cabana_id.socio_id.name is not False:
+        rec.nombre_potrero = 'Potrero de ' + rec.parcela_id.cabana_id.socio_id.name
+
 
   # Functions to get the type of camels
   

@@ -29,6 +29,13 @@ class cabana(models.Model):
       #print("nombre ", socio.name)
       self.nombre_socio = socio.name
 
+  # Funcion que autocompleta el campo nombre al elegir el socio
+  @api.onchange('socio_id')
+  def onchange_socio(self):
+    for rec in self:
+      if rec.socio_id.name is not False:
+        rec.nombre = 'Cabaña de ' + rec.socio_id.name
+
 
   nombre = fields.Char(string = "Nombre", required = True)
   

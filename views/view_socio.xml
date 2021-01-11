@@ -18,11 +18,32 @@
     <field name="view_mode">graph</field>
     <field name="view_id" ref="coop2.socio_camelido_graph"/>
   </record>
-
-
-
-
   -->
+    <record id="view_socio_tree" model="ir.ui.view">
+      <field name="name">res.partner.inherit.tree</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='display_name']" position="after">
+          <field name="id"/>
+          <field name="dni"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="view_socio_kanban" model="ir.ui.view">
+      <field name="name">res.partner.inherit.kanban</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='display_name']" position="after">
+          <br/>
+          <field name="dni"/>
+          <field name="id"/>
+        </xpath>
+      </field>
+    </record>
+
     <record id="view_socio_form" model="ir.ui.view">
       <field name="name">res.partner.inherit</field>
       <field name="model">res.partner</field>
@@ -170,6 +191,32 @@
           </page>
 
 -->
+
+          <page string="Asistencia y capacitaciones" attrs="{'invisible':[('es_socio', '==', False)]}">
+            <group string="Asistencias del técnico">
+              <field name="asistencias">
+                <tree editable="bottom">
+                  <field name="tecnico_id"/>
+                  <field name="fecha"/>
+                  <field name="tema"/>
+                  <field name="recomendacion"/>
+                  <field name="cumplio"/>
+                </tree>
+              </field>
+            </group>
+            <group string="Capacitaciones del tecnico">
+              <field name="capacitaciones">
+                <tree editable="bottom">
+                  <field name="tecnico_id"/>
+                  <field name="fecha"/>
+                  <field name="tema"/>
+                  <field name="financiacion"/>
+                </tree>
+              </field>
+            </group>
+          </page>
+
+
           <page string="Familia y vivienda" attrs="{'invisible':[('es_socio', '==', False)]}">
             <group>
               <group string="Caractéristicas de domicilio">
@@ -245,8 +292,17 @@
         </graph>
       </field>
     </record>-->
-    
-    
+
+  <!-- Search view para DNI -->
+		<record id="view_res_partner_inherit_search_dni" model="ir.ui.view">
+			<field name="name">socio.search.view</field>
+			<field name="model">res.partner</field>
+			<field name="arch" type="xml">
+				<search string="Busqueda por DNI">
+					<field name="dni"/>
+				</search>
+			</field>
+		</record>
 
     <record id="view_res_partner_inherit_rearch" model="ir.ui.view">
       <field name="name">res.partner.search.expand.filter</field>

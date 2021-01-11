@@ -31,6 +31,9 @@
           </div>
           <group string="Información general">
             <group>
+
+              <field name="socio_id" domain="[('es_socio', '=', True)]"/>
+              <h6> Número: DNI del socio - número de alpaca </h6>
               <field name="identificacion"/>
               <field name="tipo_identificacion"/>
              <!-- <field name="activo"  widget="boolean_button"/> -->
@@ -38,11 +41,8 @@
               <field name="fecha_empadre"/>
               <field name="fecha_nac"/>
               <field name="edad"/>
-
-              <field name="socio_id" domain="[('es_socio', '=', True)]"/>
               <field name="potrero_id"/>
               <!--<field name="nombre_socio"/> -->
-
             </group>
             <group>
               <field name="sexo" widget="radio"/>

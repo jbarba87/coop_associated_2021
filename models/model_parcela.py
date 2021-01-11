@@ -33,6 +33,13 @@ class parcela(models.Model):
       socio = self.cabana_id.socio_id
       self.socio_id = socio.id
 
+  # Funcion que autocompleta el campo nombre al elegir el socio
+  @api.onchange('cabana_id')
+  def onchange_socio(self):
+    for rec in self:
+      if rec.cabana_id.socio_id.name is not False:
+        rec.nombre_parcela = 'Parcela de ' + rec.cabana_id.socio_id.name
+
 
   nombre_parcela = fields.Char(string="Nombre de la parcela", required = True)
   area = fields.Float(string="Area")

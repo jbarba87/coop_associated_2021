@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'board', 'mail'],
+    'depends': ['base', 'board', 'mail', 'hr'],
 
     # always loaded
     'data': [
@@ -35,6 +35,7 @@
         'views/view_camelido_andino.xml',
         'views/view_historial.xml',
         'views/view_tablero.xml',
+        'views/view_emp.xml',
 #        'data/data.xml',
 #        'data/data_esquila.xml',
         'data/asoc.xml',
