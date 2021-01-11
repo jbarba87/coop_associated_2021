@@ -27,8 +27,8 @@
         <sheet>
           <group>
             <group>
-              <field name="nombre"/>
               <field name="socio_id"  domain="[('es_socio', '=', True)]"/>
+              <field name="nombre"/>
               <field name="comunidad"/>
               <field name="distrito_cab"/>
               <field name="provincia_cab"/>

@@ -139,7 +139,7 @@
           'data/x_user_48.xml',
           'data/x_user_49.xml',
           'data/x_user_50.xml',  
-          'views/templates_prueba.xml',
+#          'views/templates_prueba.xml',
 
     ],
     # only loaded in demonstration mode

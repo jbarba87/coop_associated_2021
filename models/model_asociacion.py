@@ -11,6 +11,11 @@ class asociacion(models.Model):
   _description = "Asociacion"
   _rec_name = "nombre_asociacion"
   
-  nombre_asociacion = fields.Char(string="Nombre", required=True)
-
+  nombre_asociacion = fields.Char(string="Nombre")
+  departamento = fields.Selection([
+    ('Ayacucho', 'Ayacucho'),
+    ('Apurimac', 'Apurimac'),
+    ('Arequipa', 'Arequipa'),
+    ('Cusco', 'Cusco'),
+  ], default="Ayacucho", string="Departamento")
 

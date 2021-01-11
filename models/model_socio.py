@@ -20,9 +20,9 @@ class socio(models.Model):
   _inherit = "res.partner"
 
   ## SQL constrain for DNI
-  _sql_constraints = [
-    ('DNI_unico', 'unique (dni)', 'Ya existe un socio con ese número de DNI.')
-  ]
+  #_sql_constraints = [
+  #  ('DNI_unico', 'unique (dni)', 'Ya existe un socio con ese número de DNI.')
+  #]
 
 
   # Constrains for DNI
@@ -152,8 +152,13 @@ class socio(models.Model):
   # Lugar de nacimiento
   distrito_nac = fields.Char(string = "Distrito")
   provincia_nac = fields.Char(string = "Provincia")
-  departamento_nac = fields.Char(string = "Departamento")
-  
+  departamento_nac = fields.Selection([
+    ('Ayacucho', 'Ayacucho'),
+    ('Apurimac', 'Apurimac'),
+    ('Arequipa', 'Arequipa'),
+    ('Cusco', 'Cusco'),
+  ], default="Ayacucho", string="Departamento")
+
   #archive = os.getcwd() + '/addons/coop2/models/dep.txt'
   
   # Importar departamentos
@@ -186,7 +191,7 @@ class socio(models.Model):
 
 	## CAMPOS AGREGADOS DEBIDO AL DOCUMENTO #### 
 
-  num = [(x, str(x)) for x in range(1, 10)]
+  num = [(x, str(x)) for x in range(0, 10)]
   num_hijos_1 = fields.Selection(num, string="Hijos de 0 a 5 años")
   num_hijos_2 = fields.Selection(num, string="Hijos de 6 a 10 años")
   num_hijos_3 = fields.Selection(num, string="Hijos de 11 a 15 años")

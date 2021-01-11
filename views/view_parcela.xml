@@ -25,8 +25,8 @@
         <sheet>
           <group string="Información general">
             <group>
-              <field name="nombre_parcela"/>
               <field name="cabana_id"/>
+              <field name="nombre_parcela"/>
               <field name="nombre_socio"/>
               <field name="area"/>
               <field name="cond_tenencia_tierras"/>
